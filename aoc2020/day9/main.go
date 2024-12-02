@@ -3,7 +3,7 @@ package day9
 import (
 	"slices"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 func ValidateInput(_pre []int, v int) bool {
@@ -17,7 +17,7 @@ func ValidateInput(_pre []int, v int) bool {
 			if i == j {
 				continue
 			}
-			if pre[i] + pre[j] == v {
+			if pre[i]+pre[j] == v {
 				return true
 			}
 		}
@@ -28,7 +28,7 @@ func ValidateInput(_pre []int, v int) bool {
 
 func mostGenericSolver1(inp []int, size int) int {
 	for i, v := range inp[size:] {
-		if !ValidateInput(inp[i:i + size], v) {
+		if !ValidateInput(inp[i:i+size], v) {
 			return v
 		}
 	}
@@ -72,7 +72,7 @@ func Solve2(inp string) any {
 	min, max := GenericSolver2(parsed, badNum)
 
 	// Fun Fact: we no longer care about the parsed data
-	arr := parsed[min:max+1]
+	arr := parsed[min : max+1]
 	slices.Sort(arr)
 
 	return arr[0] + arr[len(arr)-1]

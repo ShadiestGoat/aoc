@@ -3,7 +3,7 @@ package day2
 import (
 	"math"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 func parseInput(inp string) [][]int {
@@ -45,9 +45,9 @@ func Solve1(inp string) any {
 
 func IsSafeWithoutOne(r []int) bool {
 	for i := 0; i < len(r); i++ {
-		cr := make([]int, len(r) - 1)
+		cr := make([]int, len(r)-1)
 		copy(cr[:i], r[:i])
-		copy(cr[i:], r[i + 1:])
+		copy(cr[i:], r[i+1:])
 
 		if isSafe(cr) {
 			return true

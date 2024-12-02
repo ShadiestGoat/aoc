@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day10"
+	"github.com/shadiestgoat/aoc/aoc2020/day10"
 )
 
 const INPUT_1 = `
@@ -63,7 +63,7 @@ func TestSolver2(t *testing.T) {
 		resp := day10.Solve2(strings.TrimSpace(inp))
 
 		if resp != exp[i] {
-			t.Errorf("Failed in example #%v: Expected %v, got %v", i + 1, exp[i], resp)
+			t.Errorf("Failed in example #%v: Expected %v, got %v", i+1, exp[i], resp)
 		}
 	}
 }

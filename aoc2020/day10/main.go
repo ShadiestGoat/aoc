@@ -3,13 +3,13 @@ package day10
 import (
 	"slices"
 
-	"shadygoat.eu/aoc/utils"
 	"github.com/mxschmitt/golang-combinations"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 func Solve1(inp string) any {
 	parsed := utils.SplitAndParseInt(inp, "\n")
-	
+
 	slices.Sort(parsed)
 
 	diffs := map[int]int{
@@ -22,7 +22,7 @@ func Solve1(inp string) any {
 		if i == 0 {
 			diff = v
 		} else {
-			diff = v - parsed[i - 1]
+			diff = v - parsed[i-1]
 		}
 
 		diffs[diff]++
@@ -33,11 +33,11 @@ func Solve1(inp string) any {
 
 type Group struct {
 	Numbers []int
-	Solid bool
+	Solid   bool
 }
 
 func (g Group) LastN() int {
-	return g.Numbers[len(g.Numbers) - 1]
+	return g.Numbers[len(g.Numbers)-1]
 }
 
 func PossibilityCounter(min, max int, path []int) int {
@@ -54,7 +54,7 @@ func PossibilityCounter(min, max int, path []int) int {
 
 		good := true
 		for j, v := range tmp[1:] {
-			if v - tmp[j] > 3 {
+			if v-tmp[j] > 3 {
 				good = false
 				break
 			}
@@ -70,7 +70,7 @@ func PossibilityCounter(min, max int, path []int) int {
 
 func Solve2(inp string) any {
 	parsed := utils.SplitAndParseInt(inp, "\n")
-	
+
 	slices.Sort(parsed)
 
 	groups := []*Group{
@@ -83,9 +83,9 @@ func Solve2(inp string) any {
 	}
 
 	for _, v := range parsed {
-		lg := groups[len(groups) - 1]
+		lg := groups[len(groups)-1]
 
-		maxDiff := v - lg.Numbers[len(lg.Numbers) - 1] == 3
+		maxDiff := v-lg.Numbers[len(lg.Numbers)-1] == 3
 
 		if maxDiff {
 			if lg.Solid {
@@ -96,15 +96,15 @@ func Solve2(inp string) any {
 				}
 			} else {
 				lastN := lg.LastN()
-				
-				lg.Numbers = lg.Numbers[:len(lg.Numbers) - 1]
+
+				lg.Numbers = lg.Numbers[:len(lg.Numbers)-1]
 				if len(lg.Numbers) == 0 {
-					groups = groups[:len(groups) - 1]
+					groups = groups[:len(groups)-1]
 				}
 
 				groups = append(groups, &Group{
 					Numbers: []int{lastN, v},
-					Solid: true,
+					Solid:   true,
 				})
 			}
 		} else {
@@ -126,7 +126,7 @@ func Solve2(inp string) any {
 	}
 
 	for _, g := range groups[1:] {
-		lg := groupsFixed[len(groupsFixed) - 1]
+		lg := groupsFixed[len(groupsFixed)-1]
 
 		if lg.Solid && g.Solid {
 			if len(lg.Numbers) == 1 {
@@ -139,11 +139,11 @@ func Solve2(inp string) any {
 		}
 	}
 
-	if !groupsFixed[len(groupsFixed) - 1].Solid {
-		lg := groupsFixed[len(groupsFixed) - 1]
+	if !groupsFixed[len(groupsFixed)-1].Solid {
+		lg := groupsFixed[len(groupsFixed)-1]
 		ln := lg.LastN()
 
-		lg.Numbers = lg.Numbers[:len(lg.Numbers) - 1]
+		lg.Numbers = lg.Numbers[:len(lg.Numbers)-1]
 		groupsFixed = append(groupsFixed, &Group{
 			Numbers: []int{ln},
 			Solid:   true,
@@ -159,8 +159,8 @@ func Solve2(inp string) any {
 			continue
 		}
 
-		lg := groups[i - 1]
-		ng := groups[i + 1]
+		lg := groups[i-1]
+		ng := groups[i+1]
 
 		counter *= PossibilityCounter(lg.LastN(), ng.Numbers[0], g.Numbers)
 	}

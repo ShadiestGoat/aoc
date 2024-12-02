@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"shadygoat.eu/aoc/solvers"
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/solvers"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 //go:generate go run -C ./template . ..

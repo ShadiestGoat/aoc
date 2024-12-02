@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 type Rule struct {
 	Possibilities map[string]bool
 
-	Deps map[int]bool
+	Deps     map[int]bool
 	Resolved bool
-	RawRule string
+	RawRule  string
 }
 
 func resolveRule(rules map[int]*Rule, current []string, restOfRules []int) []string {
@@ -24,7 +24,7 @@ func resolveRule(rules map[int]*Rule, current []string, restOfRules []int) []str
 
 	for _, c := range current {
 		for p := range rules[restOfRules[0]].Possibilities {
-			newPoss = append(newPoss, c + p)
+			newPoss = append(newPoss, c+p)
 		}
 	}
 
@@ -73,7 +73,7 @@ func parseAllRules(inp string) map[int]*Rule {
 			if r.Resolved {
 				continue
 			}
-	
+
 			resolvable := true
 			for d := range r.Deps {
 				if !rules[d].Resolved {
@@ -81,11 +81,11 @@ func parseAllRules(inp string) map[int]*Rule {
 					break
 				}
 			}
-	
+
 			if !resolvable {
 				continue
 			}
-	
+
 			pipes := strings.Split(r.RawRule, " | ")
 			resolved := map[string]bool{}
 
@@ -97,7 +97,7 @@ func parseAllRules(inp string) map[int]*Rule {
 					resolved[v] = true
 				}
 			}
-	
+
 			r.Resolved = true
 			r.Possibilities = resolved
 			resolvedCount++

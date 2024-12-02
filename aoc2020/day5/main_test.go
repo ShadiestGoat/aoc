@@ -3,7 +3,7 @@ package day5_test
 import (
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day5"
+	"github.com/shadiestgoat/aoc/aoc2020/day5"
 )
 
 func TestParseRow(t *testing.T) {

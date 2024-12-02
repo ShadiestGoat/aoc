@@ -1,4 +1,4 @@
-module shadygoat.eu/aoc
+module github.com/shadiestgoat/aoc
 
 go 1.23.2
 

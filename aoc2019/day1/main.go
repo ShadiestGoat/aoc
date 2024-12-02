@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 func parseLine(l string) int {

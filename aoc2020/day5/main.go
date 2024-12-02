@@ -3,7 +3,7 @@ package day5
 import (
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 
 func doSearch(min, max int, instructions string, lower rune) int {
 	for _, d := range instructions {
-		half := (max - min + 1)/2
+		half := (max - min + 1) / 2
 
 		if d == lower {
 			max -= half
@@ -28,13 +28,13 @@ func doSearch(min, max int, instructions string, lower rune) int {
 // Parses a row input into {row, col}
 func ParseRow(r string) [2]int {
 	return [2]int{
-		doSearch(0, ROW_COUNT - 1, r[:7], 'F'),
-		doSearch(0, COL_COUNT - 1, r[7:], 'L'),
+		doSearch(0, ROW_COUNT-1, r[:7], 'F'),
+		doSearch(0, COL_COUNT-1, r[7:], 'L'),
 	}
 }
 
 func SeatID(v [2]int) int {
-	return v[0] * 8 + v[1]
+	return v[0]*8 + v[1]
 }
 
 func parseInput(inp string) utils.Iterator[[2]int] {
@@ -84,10 +84,10 @@ func Solve2(inp string) any {
 			if col {
 				continue
 			}
-			if j + 1 < COL_COUNT && !row[j + 1] {
+			if j+1 < COL_COUNT && !row[j+1] {
 				continue
 			}
-			if j > 0 && !row[j - 1] {
+			if j > 0 && !row[j-1] {
 				continue
 			}
 

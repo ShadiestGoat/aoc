@@ -10,7 +10,7 @@ const (
 
 package solvers
 
-import "shadygoat.eu/aoc/aoc%v"
+import "github.com/shadiestgoat/aoc/aoc%v"
 
 func init() {
 	Solvers = aoc%v.Solvers
@@ -20,7 +20,7 @@ func init() {
 
 func makeWrapperSolver(basePath string, year string) {
 	os.WriteFile(
-		basePath + "/solvers/" + year + ".go",
+		basePath+"/solvers/"+year+".go",
 		[]byte(fmt.Sprintf(SOLVER_FILE, year, year, year)),
 		0755,
 	)

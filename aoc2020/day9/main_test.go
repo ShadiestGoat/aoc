@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day9"
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/aoc2020/day9"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 const INPUT = `

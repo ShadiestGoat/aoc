@@ -3,7 +3,7 @@ package day13_test
 import (
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day13"
+	"github.com/shadiestgoat/aoc/aoc2020/day13"
 )
 
 func TestGenericCRA(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 func parseInput(inp string) []int {
@@ -29,8 +29,8 @@ func Solve1(inp string) any {
 	numbers := parseInput(inp)
 
 	for i, n1 := range numbers {
-		for _, n2 := range numbers[i + 1:] {
-			if n1 + n2 == 2020 {
+		for _, n2 := range numbers[i+1:] {
+			if n1+n2 == 2020 {
 				return n1 * n2
 			}
 		}
@@ -45,12 +45,12 @@ func Solve2(inp string) any {
 	// recursion is for nerds
 	for i, n1 := range numbers {
 		for j, n2 := range numbers[i:] {
-			if n1 + n2 > 2020 {
+			if n1+n2 > 2020 {
 				continue
 			}
 
-			for _, n3 := range numbers[i + j:] {
-				if n1 + n2 + n3 == 2020 {
+			for _, n3 := range numbers[i+j:] {
+				if n1+n2+n3 == 2020 {
 					return n1 * n2 * n3
 				}
 			}

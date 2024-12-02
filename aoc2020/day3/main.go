@@ -3,7 +3,7 @@ package day3
 import (
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 const (
@@ -14,23 +14,23 @@ const (
 type SledPath struct {
 	Map string
 
-	slopeX int
-	slopeY int
-	lineSize int
+	slopeX    int
+	slopeY    int
+	lineSize  int
 	lineCount int
-	i int
+	i         int
 }
 
 func (s *SledPath) Next() bool {
 	s.i++
 
-	return s.i * s.slopeY < s.lineCount
+	return s.i*s.slopeY < s.lineCount
 }
 
 func (s *SledPath) Value() byte {
 	baseI := (s.i * s.slopeX) % s.lineSize
 
-	return s.Map[baseI + s.i * (s.lineSize + 1) * s.slopeY]
+	return s.Map[baseI+s.i*(s.lineSize+1)*s.slopeY]
 }
 
 func parseInput(inp string, slopeX, slopeY int) utils.Iterator[byte] {
@@ -72,7 +72,7 @@ func Solve2(inp string) any {
 	for _, cfg := range slopes {
 		s := parseInput(inp, cfg[0], cfg[1])
 		amt := 0
-		
+
 		for s.Next() {
 			if s.Value() == TREE {
 				amt++

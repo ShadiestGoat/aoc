@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"shadygoat.eu/aoc/solvers"
+	"github.com/shadiestgoat/aoc/solvers"
 )
 
 func fetchInput(day int, cookie string) string {

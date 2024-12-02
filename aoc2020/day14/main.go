@@ -4,12 +4,12 @@ import (
 	"strconv"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 func toBin(v int) []rune {
 	bin := strconv.FormatUint(uint64(v), 2)
-	return []rune(strings.Repeat("0", 36 - len(bin)) + bin)
+	return []rune(strings.Repeat("0", 36-len(bin)) + bin)
 }
 
 type memHandler = func(mask string, m map[int]uint, addr int, val int)
@@ -25,7 +25,7 @@ func parseInput(inp string, onMem memHandler) int {
 		case "mas":
 			mask = spl[1]
 		case "mem":
-			addr, _ := strconv.Atoi(spl[0][4:len(spl[0]) - 1])
+			addr, _ := strconv.Atoi(spl[0][4 : len(spl[0])-1])
 			val, _ := strconv.Atoi(spl[1])
 
 			onMem(mask, mem, addr, val)

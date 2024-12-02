@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day17"
+	"github.com/shadiestgoat/aoc/aoc2020/day17"
 )
 
 const INPUT = `

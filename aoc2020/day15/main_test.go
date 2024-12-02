@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day15"
+	"github.com/shadiestgoat/aoc/aoc2020/day15"
 )
 
 func TestSolve1(t *testing.T) {

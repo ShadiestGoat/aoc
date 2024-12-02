@@ -4,10 +4,10 @@ import (
 	"strconv"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
-func evalBraces(line *string, doMath func (string) int) bool {
+func evalBraces(line *string, doMath func(string) int) bool {
 	i1 := strings.LastIndex(*line, "(")
 	if i1 == -1 {
 		return false
@@ -23,11 +23,12 @@ func evalBraces(line *string, doMath func (string) int) bool {
 }
 
 func replaceStr(str *string, val string, i1, i2 int) {
-	*str = (*str)[:i1] + val + (*str)[i2 + 1:]
+	*str = (*str)[:i1] + val + (*str)[i2+1:]
 }
 
 func DoMathLTR(line string) int {
-	for evalBraces(&line, DoMathLTR) {}
+	for evalBraces(&line, DoMathLTR) {
+	}
 
 	line = strings.ReplaceAll(line, " ", "")
 
@@ -59,13 +60,13 @@ func DoMathLTR(line string) int {
 	}
 }
 
-func mathPlusParser(line *string, sym string, op func (a, b int) int) {
+func mathPlusParser(line *string, sym string, op func(a, b int) int) {
 	for strings.Count(*line, sym) != 0 {
 		i := strings.Index(*line, sym)
 
 		iMin := strings.LastIndexAny((*line)[:i], "+*")
 
-		iMax := strings.IndexAny((*line)[i + 1:], "+*")
+		iMax := strings.IndexAny((*line)[i+1:], "+*")
 		if iMax == -1 {
 			iMax = len(*line)
 		} else {
@@ -74,15 +75,16 @@ func mathPlusParser(line *string, sym string, op func (a, b int) int) {
 
 		replaceStr(line, strconv.Itoa(
 			op(
-				utils.ParseInt((*line)[iMin + 1:i]),
-				utils.ParseInt((*line)[i + 1:iMax]),
+				utils.ParseInt((*line)[iMin+1:i]),
+				utils.ParseInt((*line)[i+1:iMax]),
 			),
-		), iMin + 1, iMax - 1)
+		), iMin+1, iMax-1)
 	}
 }
 
 func DoMathPlus(line string) int {
-	for evalBraces(&line, DoMathPlus) {}
+	for evalBraces(&line, DoMathPlus) {
+	}
 	line = strings.ReplaceAll(line, " ", "")
 
 	mathPlusParser(&line, "+", func(a, b int) int {
@@ -96,7 +98,7 @@ func DoMathPlus(line string) int {
 	return utils.ParseInt(line)
 }
 
-func solve(inp string, doMath func (string) int) int {
+func solve(inp string, doMath func(string) int) int {
 	sum := 0
 
 	for _, l := range strings.Split(inp, "\n") {

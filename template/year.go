@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	BASE_PKG = "shadygoat.eu/aoc/"
+	BASE_PKG = "github.com/shadiestgoat/aoc/"
 	FILE_TPL = `package %v
 // THIS FILE IS AUTO GENERATED, DO NOT EDIT MANUALLY!
 
@@ -25,7 +25,7 @@ var Solvers = map[string]func (string) any {
 )
 
 var (
-	REG_SOLVER = regexp.MustCompile(`func Solve\d+?\(.+? string\) any`)
+	REG_SOLVER       = regexp.MustCompile(`func Solve\d+?\(.+? string\) any`)
 	REG_EMPTY_SOLVER = regexp.MustCompile(EMPTY_SOLVER)
 )
 
@@ -69,7 +69,7 @@ func makeYearFile(p string) bool {
 	solveList := []string{}
 
 	for _, d := range days {
-		importList = append(importList, "\t\"" + BASE_PKG + y + "/" + d + `"`)
+		importList = append(importList, "\t\""+BASE_PKG+y+"/"+d+`"`)
 		s := ""
 
 		dayC := d[3:]
@@ -77,11 +77,11 @@ func makeYearFile(p string) bool {
 			s += fmt.Sprintf("\t\"%s-%d\": %s.Solve%d,\n", dayC, i, d, i)
 		}
 
-		solveList = append(solveList, s[:len(s) - 1])
+		solveList = append(solveList, s[:len(s)-1])
 	}
 
 	cont := fmt.Sprintf(FILE_TPL, y, strings.Join(importList, "\n"), strings.Join(solveList, "\n\n"))
-	os.WriteFile(p + "/solvers.go", []byte(cont), 0755)
+	os.WriteFile(p+"/solvers.go", []byte(cont), 0755)
 
 	return true
 }

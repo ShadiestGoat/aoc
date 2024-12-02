@@ -4,12 +4,12 @@ import (
 	"strconv"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 type PasswordPolicy struct {
 	Min, Max int
-	Letter byte
+	Letter   byte
 }
 
 func (p PasswordPolicy) IsValidPassword1(pass string) bool {
@@ -33,19 +33,19 @@ func (p PasswordPolicy) IsValidPassword2(pass string) bool {
 		return false
 	}
 
-	min := pass[p.Min - 1] == p.Letter
+	min := pass[p.Min-1] == p.Letter
 
 	if len(pass) < p.Max {
 		return min
 	}
 
-	max := pass[p.Max - 1] == p.Letter
+	max := pass[p.Max-1] == p.Letter
 
 	return min != max
 }
 
 type DBEntry struct {
-	Policy *PasswordPolicy
+	Policy   *PasswordPolicy
 	Password string
 }
 
@@ -62,7 +62,7 @@ func parseInput(inp string) []*DBEntry {
 			panic("Bad split of l '" + l + "'")
 		}
 
-		spl2 := strings.Split(spl[0][:len(spl[0]) - 2], "-")
+		spl2 := strings.Split(spl[0][:len(spl[0])-2], "-")
 		min, err := strconv.Atoi(spl2[0])
 		utils.PanicIfErr(err, "parsing min in '%v'", spl[0])
 
@@ -70,11 +70,11 @@ func parseInput(inp string) []*DBEntry {
 		utils.PanicIfErr(err, "parsing max in '%v'", spl[0])
 
 		pass = append(pass, &DBEntry{
-			Policy:   &PasswordPolicy{
-				Min:    min,
-				Max:    max,
+			Policy: &PasswordPolicy{
+				Min: min,
+				Max: max,
 				// Good practices only here
-				Letter: spl[0][len(spl[0]) - 1],
+				Letter: spl[0][len(spl[0])-1],
 			},
 			Password: spl[1],
 		})

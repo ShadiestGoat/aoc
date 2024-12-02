@@ -4,11 +4,11 @@ import (
 	"strings"
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day18"
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/aoc2020/day18"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
-func doTest(t *testing.T, tests []string, h func (string) int) {
+func doTest(t *testing.T, tests []string, h func(string) int) {
 	for _, te := range tests {
 		cfg := strings.Split(te, " = ")
 

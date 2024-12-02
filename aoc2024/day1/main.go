@@ -5,10 +5,10 @@ import (
 	"slices"
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
-func parseInput(inp string, h func (vl, vr int)) {
+func parseInput(inp string, h func(vl, vr int)) {
 	lines := strings.Split(inp, "\n")
 
 	for _, s := range lines {

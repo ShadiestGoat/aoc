@@ -3,7 +3,7 @@ package day3_test
 import (
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day3"
+	"github.com/shadiestgoat/aoc/aoc2020/day3"
 )
 
 const INPUT = `

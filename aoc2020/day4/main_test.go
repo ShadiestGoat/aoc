@@ -3,7 +3,7 @@ package day4_test
 import (
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day4"
+	"github.com/shadiestgoat/aoc/aoc2020/day4"
 )
 
 const INPUT = `
@@ -24,7 +24,7 @@ iyr:2011 ecl:brn hgt:59in
 
 func TestSolve1(t *testing.T) {
 	v := day4.Solve1(INPUT)
-	
+
 	if v != 2 {
 		t.Fatalf("Grr - got %v valid passports, expected 2", v)
 	}

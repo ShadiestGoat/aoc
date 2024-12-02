@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"shadygoat.eu/aoc/aoc2020/day11"
+	"github.com/shadiestgoat/aoc/aoc2020/day11"
 )
 
 const INPUT = `
@@ -98,17 +98,16 @@ LLL####LL#
 #.L####.L#
 `
 
-
 func TestStateExec(t *testing.T) {
-	newState := func () *day11.State {
+	newState := func() *day11.State {
 		return day11.ParseInput(strings.TrimSpace(INPUT))
 	}
 
-	assertState := func (s *day11.State, t *testing.T, i int, exp string) {
+	assertState := func(s *day11.State, t *testing.T, i int, exp string) {
 		if s.CurState != strings.TrimSpace(exp) {
 			t.Log("-- expected --\n" + exp)
 			t.Log("-- gotten --\n\n" + s.CurState)
-			t.Errorf("-- States mismatch (#%v) --", i + 1)
+			t.Errorf("-- States mismatch (#%v) --", i+1)
 		}
 	}
 

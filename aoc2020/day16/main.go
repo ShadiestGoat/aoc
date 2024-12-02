@@ -3,11 +3,11 @@ package day16
 import (
 	"strings"
 
-	"shadygoat.eu/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 type Rule struct {
-	Name string
+	Name  string
 	Rules []*Constraint
 }
 
@@ -37,7 +37,7 @@ func parseInput(inp string) ([]*Rule, []int, [][]int) {
 		r := &Rule{}
 
 		spl := strings.Split(l, ": ")
-		
+
 		r.Name = spl[0]
 
 		ranges := strings.Split(spl[1], " or ")
@@ -58,7 +58,7 @@ func parseInput(inp string) ([]*Rule, []int, [][]int) {
 	myTicket := utils.SplitAndParseInt(spl[1], ",")
 
 	spl = strings.Split(parts[2], "\n")
-	nearby := make([][]int, len(spl) - 1)
+	nearby := make([][]int, len(spl)-1)
 
 	for i, v := range spl[1:] {
 		nearby[i] = utils.SplitAndParseInt(v, ",")
@@ -67,7 +67,7 @@ func parseInput(inp string) ([]*Rule, []int, [][]int) {
 	return rules, myTicket, nearby
 }
 
-func ValidateTicket(rules []*Rule, vals []int, onBad func (v int) bool) bool {
+func ValidateTicket(rules []*Rule, vals []int, onBad func(v int) bool) bool {
 	ok := true
 
 	for _, v := range vals {
@@ -114,7 +114,7 @@ func Solve2(inp string) any {
 	goodNearby := [][]int{}
 
 	for _, t := range nearby {
-		if ValidateTicket(rules, t, func(v int) bool {return true}) {
+		if ValidateTicket(rules, t, func(v int) bool { return true }) {
 			goodNearby = append(goodNearby, t)
 		}
 	}
