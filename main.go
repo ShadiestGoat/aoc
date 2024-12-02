@@ -19,7 +19,9 @@ func main() {
 		panic("Grr and brr bad build... see scripts/run.sh")
 	}
 
-	if os.Getenv("COOKIE") == "" {
+	cookie := os.Getenv("COOKIE")
+
+	if cookie == "" {
 		c, err := os.ReadFile(".conf/.cookie")
 		if err != nil {
 			if errors.Is(err, os.ErrNotExist) {
@@ -27,8 +29,8 @@ func main() {
 			}
 			utils.PanicIfErr(err, "reading cookie file")
 		}
-	
-		os.Setenv("COOKIE", strings.TrimSpace(string(c)))
+
+		cookie = strings.TrimSpace(string(c))
 	}
 
 	if len(os.Args) <= 1 || len(os.Args) > 3 {
@@ -59,7 +61,7 @@ func main() {
 	}
 
 	fmt.Println("(1/2) Fetching Input...")
-	inp := utils.FetchInput(d)
+	inp := fetchInput(d, cookie)
 	fmt.Println("---> Fetched")
 
 	fmt.Println("(2/2) Solving...")
