@@ -9,7 +9,7 @@ import (
 type Config struct {
 	// num -> it's deps (ie. stuff that has to be before it)
 	NumDeps map[int][]int
-	Lists [][]int
+	Lists   [][]int
 }
 
 func (c *Config) meetsDeps(n int, allVals map[int]bool, used map[int]bool) bool {
@@ -47,7 +47,7 @@ func (c *Config) makeListRight(l []int) []int {
 	receptacle := []int{}
 	newL := []int{}
 
-	doReceptacle := func () {
+	doReceptacle := func() {
 		for {
 			newRec := []int{}
 

@@ -129,7 +129,7 @@ func Solve2(inp string) any {
 			}
 		default:
 			ptr := waypoint.getXY(ins)
-			*ptr += n		
+			*ptr += n
 		}
 	}
 

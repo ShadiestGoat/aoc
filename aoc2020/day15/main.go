@@ -24,7 +24,7 @@ func PlayGame(inp string, max int) int {
 
 	gi := 1
 
-	addToHis := func (v int) {
+	addToHis := func(v int) {
 		old := his[v]
 
 		old[0], old[1] = gi, old[0]
@@ -36,10 +36,10 @@ func PlayGame(inp string, max int) int {
 		gi++
 	}
 
-	lastNum := starting[len(starting) - 1]
+	lastNum := starting[len(starting)-1]
 
 	for {
-		if gi == max + 1 {
+		if gi == max+1 {
 			return lastNum
 		}
 

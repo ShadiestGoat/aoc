@@ -36,7 +36,7 @@ func (c XY) RotateUnitVector(n int) XY {
 	sin := math.Sin(deg)
 
 	return XY{
-		int(math.Round(float64(c[0]) * cos - float64(c[1]) * sin)),
-		int(math.Round(float64(c[0]) * sin + float64(c[1]) * cos)),
+		int(math.Round(float64(c[0])*cos - float64(c[1])*sin)),
+		int(math.Round(float64(c[0])*sin + float64(c[1])*cos)),
 	}
 }

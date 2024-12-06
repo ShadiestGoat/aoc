@@ -14,7 +14,7 @@ func Assert(t *testing.T, exp, real any) {
 	t.Fatalf("Grrr expected %v, but got %v", exp, real)
 }
 
-func AssertFunc(t *testing.T, inp string, f func (string) any, exp any) {
+func AssertFunc(t *testing.T, inp string, f func(string) any, exp any) {
 	r := f(strings.TrimSpace(inp))
 
 	Assert(t, exp, r)

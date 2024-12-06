@@ -33,12 +33,12 @@ func init() {
 		{-1, 1}:  'S',
 		{1, 1}:   'S',
 	}
-	
+
 	// Mess? What mess?
 	for i := 1; i < 4; i++ {
 		curCheck := map[utils.XY]rune{}
 
-		for dir, c := range ALL_PART_2_CHECKS[i - 1] {
+		for dir, c := range ALL_PART_2_CHECKS[i-1] {
 			var newDir utils.XY
 
 			if dir[0] == dir[1] {

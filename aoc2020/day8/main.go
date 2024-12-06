@@ -6,10 +6,10 @@ import (
 )
 
 type CurState struct {
-	Acc int
-	Index int
-	LastIndex int
-	History map[int]bool
+	Acc             int
+	Index           int
+	LastIndex       int
+	History         map[int]bool
 	AllInstructions []string
 }
 
@@ -89,7 +89,7 @@ func Solve2(inp string) any {
 		curCandidates = append(curCandidates, h)
 	}
 
-	switchIns := func (i int) {
+	switchIns := func(i int) {
 		oldIns := s.AllInstructions[i]
 		newIns := ""
 

@@ -5,7 +5,7 @@ import (
 )
 
 type Group struct {
-	Data map[rune]int
+	Data         map[rune]int
 	Participants int
 }
 

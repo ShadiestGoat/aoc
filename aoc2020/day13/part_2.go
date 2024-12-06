@@ -19,9 +19,9 @@ func inverseModulo(a, m int) int {
 	for a > 1 {
 		q := a / m
 
-		m, a = a % m, m
+		m, a = a%m, m
 
-		x0, x1 = x1 - q * x0, x0
+		x0, x1 = x1-q*x0, x0
 	}
 
 	if x1 < 0 {

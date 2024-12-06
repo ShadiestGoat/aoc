@@ -6,7 +6,7 @@ import (
 )
 
 type Bag struct {
-	Name string
+	Name       string
 	DirectDeps []*BagDep
 	// Bag name -> bag amount, including deps of deps
 	ResolvedDeps map[string]int
@@ -14,7 +14,7 @@ type Bag struct {
 
 type BagDep struct {
 	Count int
-	Name string
+	Name  string
 }
 
 func parseBag(bag string) *Bag {
@@ -24,13 +24,13 @@ func parseBag(bag string) *Bag {
 	}
 	if d[1] == "no other bags." {
 		return &Bag{
-			Name:         d[0],
-			DirectDeps:   []*BagDep{},
+			Name:       d[0],
+			DirectDeps: []*BagDep{},
 		}
 	}
 
 	deps := []*BagDep{}
-	rawDeps := strings.Split(d[1][:len(d[1]) - 1], ", ")
+	rawDeps := strings.Split(d[1][:len(d[1])-1], ", ")
 
 	for _, rawDep := range rawDeps {
 		v := strings.SplitN(rawDep, " ", 4)

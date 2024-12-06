@@ -18,13 +18,13 @@ func parseValidateInt(v string, min, max int) bool {
 	return validateInt(n, min, max)
 }
 
-func validationWrapper(min, max int) func (string) bool {
+func validationWrapper(min, max int) func(string) bool {
 	return func(s string) bool {
 		return parseValidateInt(s, min, max)
 	}
 }
 
-var FIELD_VALIDATION = map[string](func (string) bool){
+var FIELD_VALIDATION = map[string](func(string) bool){
 	"byr": validationWrapper(1920, 2002),
 	"iyr": validationWrapper(2010, 2020),
 	"eyr": validationWrapper(2020, 2030),
@@ -33,12 +33,12 @@ var FIELD_VALIDATION = map[string](func (string) bool){
 			return false
 		}
 
-		unit := v[len(v) - 2:]
+		unit := v[len(v)-2:]
 		if unit != "cm" && unit != "in" {
 			return false
 		}
 
-		n, err := strconv.Atoi(v[:len(v) - 2])
+		n, err := strconv.Atoi(v[:len(v)-2])
 		if err != nil {
 			return false
 		}

@@ -13,7 +13,7 @@ func Solve1(inp string) any {
 	spl := strings.Split(inp, "\n")
 
 	departTime, _ := strconv.Atoi(spl[0])
-	
+
 	minTime := departTime
 	minID := 0
 
@@ -23,7 +23,7 @@ func Solve1(inp string) any {
 		}
 
 		id, _ := strconv.Atoi(t)
-		waitTime := id - departTime % id
+		waitTime := id - departTime%id
 
 		if waitTime < minTime {
 			minTime = waitTime

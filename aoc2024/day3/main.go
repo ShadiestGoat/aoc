@@ -8,12 +8,12 @@ import (
 
 // Yeah yeah yeah whatever regex is simple & I'm tired and dont want to do non-regex solution
 const (
-	REG_EXPR_MULT = `mul\((-?\d{1,3}),(-?\d{1,3})\)`
+	REG_EXPR_MULT       = `mul\((-?\d{1,3}),(-?\d{1,3})\)`
 	REG_EXPR_WITH_LOGIC = `(?:` + REG_EXPR_MULT + `)|(?:do\(\))|(?:don't\(\))`
 )
 
 var (
-	reg_mult = regexp.MustCompile(REG_EXPR_MULT)
+	reg_mult  = regexp.MustCompile(REG_EXPR_MULT)
 	reg_logic = regexp.MustCompile(REG_EXPR_WITH_LOGIC)
 )
 

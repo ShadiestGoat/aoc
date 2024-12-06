@@ -5,32 +5,32 @@ import (
 )
 
 const (
-	STATE_FLOOR = '.'
+	STATE_FLOOR    = '.'
 	STATE_OCCUPIED = '#'
-	STATE_EMPTY = 'L'
+	STATE_EMPTY    = 'L'
 )
 
 type State struct {
 	LastState string
 	CurState  string
 
-	perRow int
+	perRow   int
 	rowCount int
 }
 
 var SURROUND_DIRECTIONS = [][2]int{
-	{0,  -1},
-	{1,  -1},
-	{1,   0},
-	{1,   1},
-	{0,   1},
-	{-1,  1},
-	{-1,  0},
+	{0, -1},
+	{1, -1},
+	{1, 0},
+	{1, 1},
+	{0, 1},
+	{-1, 1},
+	{-1, 0},
 	{-1, -1},
 }
 
 func (s State) Coord(x, y int) int {
-	return y * (s.perRow + 1) + x
+	return y*(s.perRow+1) + x
 }
 
 func (gs *State) Exec(maxVisDir int, tolerance int) {
@@ -47,7 +47,7 @@ func (gs *State) Exec(maxVisDir int, tolerance int) {
 		}
 
 		x := i % (gs.perRow + 1)
-		y := (i - x)/(gs.perRow + 1)
+		y := (i - x) / (gs.perRow + 1)
 
 		maxOccupiedAmount := tolerance
 
@@ -61,7 +61,7 @@ func (gs *State) Exec(maxVisDir int, tolerance int) {
 			var finItem rune
 
 			for visAmt := 1; visAmt <= maxVisDir; visAmt++ {
-				x, y := x + xy[0] * visAmt, y + xy[1] * visAmt
+				x, y := x+xy[0]*visAmt, y+xy[1]*visAmt
 
 				if y < 0 || x < 0 || x >= gs.perRow || y >= gs.rowCount {
 					break
@@ -73,7 +73,6 @@ func (gs *State) Exec(maxVisDir int, tolerance int) {
 					break
 				}
 			}
-
 
 			if finItem == STATE_OCCUPIED {
 				occupiedAmount++
@@ -106,9 +105,9 @@ func ParseInput(inp string) *State {
 	perRow := strings.Index(inp, "\n")
 
 	return &State{
-		CurState:  inp,
-		perRow:    perRow,
-		rowCount:  strings.Count(inp, "\n") + 1,
+		CurState: inp,
+		perRow:   perRow,
+		rowCount: strings.Count(inp, "\n") + 1,
 	}
 }
 
@@ -126,7 +125,7 @@ func Solve1(inp string) any {
 
 func Solve2(inp string) any {
 	s := ParseInput(inp)
-	
+
 	// An amount thats def enough
 	visAmt := s.perRow * s.rowCount
 

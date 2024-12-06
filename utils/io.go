@@ -20,7 +20,7 @@ type Iterator[T any] interface {
 	Value() T
 }
 
-type IteratorFunc[T any] func () (T, bool)
+type IteratorFunc[T any] func() (T, bool)
 
 type ScannerUtil[T any] struct {
 	h IteratorFunc[T]

@@ -10,9 +10,9 @@ import (
 type State struct {
 	// Coord -> Directions
 	DirHist map[utils.XY][]utils.XY
-	CurPos utils.XY
-	Dir utils.XY
-	Board []string
+	CurPos  utils.XY
+	Dir     utils.XY
+	Board   []string
 }
 
 func (s State) outOfBounds(c utils.XY) bool {
@@ -69,7 +69,7 @@ func parseInput(inp string) *State {
 	lines := strings.Split(strings.Replace(inp, "^", ".", 1), "\n")
 	perLineChars := len(lines[0]) + 1
 
-	pos := utils.XY{rawPos % perLineChars, rawPos/perLineChars}
+	pos := utils.XY{rawPos % perLineChars, rawPos / perLineChars}
 
 	return &State{
 		DirHist: map[utils.XY][]utils.XY{
@@ -77,9 +77,9 @@ func parseInput(inp string) *State {
 				{0, -1},
 			},
 		},
-		CurPos:  pos,
-		Dir:     utils.XY{0, -1},
-		Board:   lines,
+		CurPos: pos,
+		Dir:    utils.XY{0, -1},
+		Board:  lines,
 	}
 }
 
@@ -134,7 +134,7 @@ func Solve2(inp string) any {
 		copy(s.Board, ogBoard)
 
 		row := s.Board[c[1]]
-		s.Board[c[1]] = row[:c[0]] + "#" + row[c[0] + 1:]
+		s.Board[c[1]] = row[:c[0]] + "#" + row[c[0]+1:]
 
 		for !s.GoOnce() {
 			if slices.Contains(s.DirHist[s.CurPos], s.Dir) {

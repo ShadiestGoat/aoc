@@ -70,7 +70,7 @@ func ParseInput[CT CoordT](inp string) *Map[CT] {
 
 func surroundingCoordsGeneric(og []int, vals [][]int, i int) [][]int {
 	newVals := [][]int{}
-	last := i == len(og) - 1
+	last := i == len(og)-1
 
 	for _, v := range vals {
 		noDiff := slices.Clone(v)
@@ -78,10 +78,10 @@ func surroundingCoordsGeneric(og []int, vals [][]int, i int) [][]int {
 
 		p1 := slices.Clone(v)
 		p1[i] = og[i] + 1
-		
+
 		m1 := slices.Clone(v)
 		m1[i] = og[i] - 1
-		
+
 		newVals = append(newVals, [][]int{p1, m1}...)
 
 		if !last || !slices.Equal(og, noDiff) {
@@ -93,7 +93,7 @@ func surroundingCoordsGeneric(og []int, vals [][]int, i int) [][]int {
 		return newVals
 	}
 
-	return surroundingCoordsGeneric(og, newVals, i + 1)
+	return surroundingCoordsGeneric(og, newVals, i+1)
 }
 
 func SurroundingCoords(c []int) [][]int {
@@ -130,7 +130,7 @@ func (m *Map[CT]) CountActiveSurround(c CT) int {
 func (m *Map[CT]) Exec() {
 	n := map[CT]bool{}
 	cachedSurrounds := map[CT]bool{}
-	
+
 	for c := range m.Data {
 		surround := m.convertBS(SurroundingCoords(GetBS(c)))
 		activeCount := m.CountActive(surround)
