@@ -73,7 +73,7 @@ func parseInput(inp string) *State {
 
 	return &State{
 		DirHist: map[utils.XY][]utils.XY{
-			pos: []utils.XY{
+			pos: {
 				{0, -1},
 			},
 		},
