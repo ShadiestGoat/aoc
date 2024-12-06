@@ -2,6 +2,8 @@ package day4
 
 import (
 	"strings"
+
+	"github.com/shadiestgoat/aoc/utils"
 )
 
 const (
@@ -21,11 +23,11 @@ var (
 		{-1, -1},
 	}
 
-	ALL_PART_2_CHECKS = [4]map[XY]rune{}
+	ALL_PART_2_CHECKS = [4]map[utils.XY]rune{}
 )
 
 func init() {
-	ALL_PART_2_CHECKS[0] = map[XY]rune{
+	ALL_PART_2_CHECKS[0] = map[utils.XY]rune{
 		{-1, -1}: 'M',
 		{1, -1}:  'M',
 		{-1, 1}:  'S',
@@ -34,15 +36,15 @@ func init() {
 	
 	// Mess? What mess?
 	for i := 1; i < 4; i++ {
-		curCheck := map[XY]rune{}
+		curCheck := map[utils.XY]rune{}
 
 		for dir, c := range ALL_PART_2_CHECKS[i - 1] {
-			var newDir XY
+			var newDir utils.XY
 
 			if dir[0] == dir[1] {
-				newDir = XY{dir[0] * -1, dir[1]}
+				newDir = utils.XY{dir[0] * -1, dir[1]}
 			} else {
-				newDir = XY{dir[0], dir[0]}
+				newDir = utils.XY{dir[0], dir[0]}
 			}
 
 			curCheck[newDir] = c
@@ -53,25 +55,12 @@ func init() {
 }
 
 type Board []string
-type XY [2]int
-
-func (c XY) add(c2 XY) XY {
-	return [2]int{c[0] + c2[0], c[1] + c2[1]}
-}
-
-func (c XY) mulCoord(c2 XY) XY {
-	return [2]int{c[0] * c2[0], c[1] * c2[1]}
-}
-
-func (c XY) mul(v int) XY {
-	return [2]int{c[0] * v, c[1] * v}
-}
 
 func parseInput(inp string) Board {
 	return strings.Split(inp, "\n")
 }
 
-func (b Board) checkCoord(xy XY, t rune) bool {
+func (b Board) checkCoord(xy utils.XY, t rune) bool {
 	if xy[0] < 0 || xy[1] < 0 || xy[1] >= len(b) || xy[0] >= len(b[xy[1]]) {
 		return false
 	}
@@ -79,12 +68,12 @@ func (b Board) checkCoord(xy XY, t rune) bool {
 	return rune(b[xy[1]][xy[0]]) == t
 }
 
-func (b Board) searchDir(xy XY, dir XY, targetWord string) bool {
+func (b Board) searchDir(xy utils.XY, dir utils.XY, targetWord string) bool {
 	// 0 is already confirmed
 	targetI := 1
 
 	for {
-		if !b.checkCoord(xy.add(dir.mul(targetI)), rune(targetWord[targetI])) {
+		if !b.checkCoord(xy.Add(dir.Mul(targetI)), rune(targetWord[targetI])) {
 			return false
 		}
 
@@ -96,9 +85,9 @@ func (b Board) searchDir(xy XY, dir XY, targetWord string) bool {
 	}
 }
 
-func (b Board) dirChecks(xy XY, checks map[XY]rune) bool {
+func (b Board) dirChecks(xy utils.XY, checks map[utils.XY]rune) bool {
 	for dir, t := range checks {
-		if !b.checkCoord(xy.add(dir), t) {
+		if !b.checkCoord(xy.Add(dir), t) {
 			return false
 		}
 	}
@@ -140,7 +129,7 @@ func Solve2(inp string) any {
 			}
 
 			for _, check := range ALL_PART_2_CHECKS {
-				if b.dirChecks(XY{j, i}, check) {
+				if b.dirChecks(utils.XY{j, i}, check) {
 					tot++
 					break
 				}
