@@ -43,9 +43,22 @@ func MapLines(inp string, h func(string)) {
 func MapListKeys[T comparable](l []T) map[T]bool {
 	m := make(map[T]bool, len(l))
 
+	MapListKeysOnExisting(l, m)
+
+	return m
+}
+
+func MapListKeysOnExisting[T comparable](l []T, m map[T]bool) {
 	for _, v := range l {
 		m[v] = true
 	}
+}
 
-	return m
+func MapKeys[T comparable, V any](m map[T]V) []T {
+	v := make([]T, 0, len(m))
+	for k := range m {
+		v = append(v, k)
+	}
+
+	return v
 }

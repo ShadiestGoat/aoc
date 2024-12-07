@@ -1,123 +1,133 @@
 package day19
 
 import (
-	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/shadiestgoat/aoc/utils"
 )
 
 type Rule struct {
-	Possibilities map[string]bool
-
-	Deps     map[int]bool
-	Resolved bool
-	RawRule  string
+	ID int
+	Val rune
+	Definition [][]int
 }
 
-func resolveRule(rules map[int]*Rule, current []string, restOfRules []int) []string {
-	if len(restOfRules) == 0 {
-		return current
+type RuleSet struct {
+	Rules map[int]*Rule
+}
+
+// If returns true, then do not proceed
+func (r *RuleSet) resolve(id int, cur []string, target string) ([]string, bool) {
+	tr := r.Rules[id]
+
+	if tr.Val != 0 {
+		if len(cur) == 0 {
+			if target[0] != byte(tr.Val) {
+				return nil, true
+			} else {
+				return []string{string(tr.Val)}, false
+			}
+		}
+
+		newCur := []string{}
+		for _, c := range cur {
+			v := c + string(tr.Val)
+			if strings.HasPrefix(target, v) {
+				newCur = append(newCur, v)
+			}
+		}
+
+		return newCur, len(newCur) == 0
 	}
 
-	newPoss := []string{}
+	v := map[string]bool{}
+	doResolve := false
 
-	for _, c := range current {
-		for p := range rules[restOfRules[0]].Possibilities {
-			newPoss = append(newPoss, c+p)
+	for _, def := range tr.Definition {
+		newCurs := slices.Clone(cur)
+		noResolve := false
+
+		for _, rID := range def {
+			nc, nr := r.resolve(rID, newCurs, target)
+			if nr {
+				noResolve = nr
+				break
+			}
+
+			newCurs = nc
+		}
+
+		if noResolve {
+			continue
+		}
+
+		doResolve = true
+		utils.MapListKeysOnExisting(newCurs, v)
+	}
+
+	if !doResolve {
+		return nil, true
+	}
+
+	return utils.MapKeys(v), false
+}
+
+func (r *RuleSet) IsGood(s string) bool {
+	possibilities, noResolve := r.resolve(0, []string{}, s)
+	if noResolve {
+		return false
+	}
+
+	for _, p := range possibilities {
+		if p == s {
+			return true
 		}
 	}
 
-	return resolveRule(rules, newPoss, restOfRules[1:])
+	return false
 }
 
-func parseAllRules(inp string) map[int]*Rule {
-	rules := map[int]*Rule{}
+// Override: map[RuleID] -> the rule
+func parseInput(inp string, override map[int]string) (*RuleSet, []string) {
+	spl := strings.Split(inp, "\n\n")
 
-	resolvedCount := 0
+	rs := &RuleSet{
+		Rules: map[int]*Rule{},
+	}
 
-	for _, l := range strings.Split(inp, "\n") {
+	for _, v := range strings.Split(spl[0], "\n") {
+		exprSpl := strings.Split(v, ": ")
+		id := utils.ParseInt(exprSpl[0])
+
+		expr := exprSpl[1]
+		if override[id] != "" {
+			expr = override[id]
+		}
+
 		r := &Rule{
-			Deps: map[int]bool{},
+			ID:    id,
+			Val:   0,
+			Definition: [][]int{},
 		}
-
-		spl := strings.Split(l, ": ")
-		ruleID := utils.ParseInt(spl[0])
-
-		r.RawRule = spl[1]
-
-		if spl[1][0] == '"' {
-			r.Possibilities = map[string]bool{
-				string(spl[1][1]): true,
-			}
-			r.Resolved = true
-			resolvedCount++
+		if expr[0] == '"' {
+			r.Val = rune(expr[1])
 		} else {
-			tmp := strings.ReplaceAll(spl[1], " | ", " ")
-
-			for _, v := range utils.SplitAndParseInt(tmp, " ") {
-				r.Deps[v] = true
-			}
+			r.Definition = utils.SplitAndParseInt2(expr, " | ", " ")
 		}
 
-		rules[ruleID] = r
+		rs.Rules[id] = r
 	}
 
-	lastResolvedCount := 0
-
-	for lastResolvedCount != resolvedCount {
-		fmt.Println(resolvedCount, len(rules))
-		lastResolvedCount = resolvedCount
-
-		for _, r := range rules {
-			if r.Resolved {
-				continue
-			}
-
-			resolvable := true
-			for d := range r.Deps {
-				if !rules[d].Resolved {
-					resolvable = false
-					break
-				}
-			}
-
-			if !resolvable {
-				continue
-			}
-
-			pipes := strings.Split(r.RawRule, " | ")
-			resolved := map[string]bool{}
-
-			for _, p := range pipes {
-				givenRules := utils.SplitAndParseInt(p, " ")
-
-				tmp := resolveRule(rules, []string{""}, givenRules)
-				for _, v := range tmp {
-					resolved[v] = true
-				}
-			}
-
-			r.Resolved = true
-			r.Possibilities = resolved
-			resolvedCount++
-		}
-	}
-
-	return rules
+	return rs, strings.Split(spl[1], "\n")
 }
 
 func Solve1(inp string) any {
-	parts := strings.Split(inp, "\n\n")
-
-	rules := parseAllRules(parts[0])
-	fmt.Println("parsed")
-
-	r0 := rules[0]
-
+	rs, checks := parseInput(inp, map[int]string{})
 	count := 0
-	for _, l := range strings.Split(parts[1], "\n") {
-		if r0.Possibilities[l] {
+
+	for _, c := range checks {
+		if rs.IsGood(c) {
 			count++
 		}
 	}
@@ -126,5 +136,18 @@ func Solve1(inp string) any {
 }
 
 func Solve2(inp string) any {
-	return nil
+	// Fuck you, creator, it can handle any possibilities due to efficient prefix matching!!
+	rs, checks := parseInput(inp, map[int]string{
+		8: `42 | 42 8`,
+		11: `42 31 | 42 11 31`,
+	})
+	count := 0
+
+	for _, c := range checks {
+		if rs.IsGood(c) {
+			count++
+		}
+	}
+
+	return count
 }
