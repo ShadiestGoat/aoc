@@ -62,3 +62,13 @@ func MapKeys[T comparable, V any](m map[T]V) []T {
 
 	return v
 }
+
+func Map[T any, V any](s []T, h func (T) V) []V {
+	nv := make([]V, len(s))
+
+	for i, v := range s {
+		nv[i] = h(v)
+	}
+
+	return nv
+}
