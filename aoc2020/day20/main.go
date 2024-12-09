@@ -1,11 +1,18 @@
 package day20
 
 import (
-	"fmt"
 	"slices"
 	"strings"
 
 	"github.com/shadiestgoat/aoc/utils"
+)
+
+const (
+	PART_2_MATCH = `
+|                  # |
+|#    ##    ##    ###|
+| #  #  #  #  #  #   |
+`
 )
 
 type Tile struct {
@@ -14,7 +21,7 @@ type Tile struct {
 }
 
 type BorderInfo struct {
-	BoardID int
+	TileID int
 	// 0 - top, 3 - left
 	BorderPos int
 	BorderFlipped bool
@@ -26,7 +33,7 @@ func parseInput(inp string) (map[string][]*BorderInfo, map[int]*Tile) {
 
 	addBorder := func (id, pos int, border string) {
 		borders[border] = append(borders[border], &BorderInfo{
-			BoardID:       id,
+			TileID:       id,
 			BorderPos:     pos,
 			BorderFlipped: false,
 		})
@@ -35,7 +42,7 @@ func parseInput(inp string) (map[string][]*BorderInfo, map[int]*Tile) {
 		slices.Reverse(rb)
 
 		borders[string(rb)] = append(borders[string(rb)], &BorderInfo{
-			BoardID:       id,
+			TileID:       id,
 			BorderPos:     pos,
 			BorderFlipped: true,
 		})
@@ -56,8 +63,8 @@ func parseInput(inp string) (map[string][]*BorderInfo, map[int]*Tile) {
 			rb[i] = rune(r[len(r) - 1])
 		} 
 
-		addBorder(id, 1, string(lb))
-		addBorder(id, 3, string(rb))
+		addBorder(id, 3, string(lb))
+		addBorder(id, 1, string(rb))
 
 		idToTile[id] = &Tile{id, data}
 	}
@@ -73,7 +80,7 @@ func matchCount(borders map[string][]*BorderInfo) map[int]int {
 		}
 
 		for _, b := range info {
-			idToMatchCount[b.BoardID]++
+			idToMatchCount[b.TileID]++
 		}
 	}
 
@@ -96,81 +103,45 @@ func Solve1(inp string) any {
 	return tot
 }
 
-type BuildState struct {
-	Built [][]string
-	Borders map[string][]*BorderInfo
-	Tiles map[int]*Tile
-	Corners map[int]bool
-}
-
-func (b *BuildState) getBorder(x, y int, pos int) string {
-	d := b.Built[y][x]
-	lines := strings.Split(d, "\n")
-
-	switch pos {
-	case 0:
-		return lines[0]
-	case 2:
-		return lines[len(lines) - 1]
-	case 1, 3:
-		v := make([]rune, len(lines))
-		for i, l := range lines {
-			r := l[0]
-			if pos == 3 {
-				r = l[len(l) - 1]
-			}
-
-			v[i] = rune(r)
-		}
-	}
-
-	return ""
-}
-
-func (b *BuildState) build() (string, bool) {
-	var (
-		y = 0
-		x = 1
-		cornerCount = 0
-	)
-
-	for {
-		bo := b.getBorder(x - 1, 0, 1)
-		info := b.Borders[bo]
-		if len(info) == 1 {
-			return "", false
-		}
-		
-	}
-}
-
-// Assume no false matches....... (except double flips)
-func makeBoard(borders map[string][]*BorderInfo, tiles map[int]*Tile) string {
-	// matches := matchCount(borders)
-
-	// tID, flip 
-	choice := [3]int{}
-	for id, c := range matches {
-		if c != 4 {
-			continue
-		}
-
-		break
-	}
-
-	for _, info := range borders {
-		if len(info) == 1 {
-			fmt.Println(info[0])
-			continue
-		}
-		fmt.Println(info[0], info[1])
-	}
-
-	return ""
-}
-
 func Solve2(inp string) any {
 	board := makeBoard(parseInput(inp))
+	if board == "" {
+		panic("Empty Board!")
+	}
 
-	return board
+	tot := 0
+
+	for _, l := range strings.Split(board, "\n") {
+		for _, r := range l {
+			if r == '#' {
+				tot++
+			}
+		}
+	}
+
+	matcher := NewCoolMatcher(inp, PART_2_MATCH)
+
+	lines := strings.Split(board, "\n")
+	for rot := 0; rot < 4; rot++ {
+		rotLines := rotateString(lines, rot)
+
+		for _, fx := range []bool{true, false} {
+			for _, fy := range []bool{true, false} {
+				lines := rotLines
+				if fx {
+					lines = flipX(lines)
+				}
+				if fy {
+					lines = flipY(lines)
+				}
+
+				matched := matcher.Match(strings.Join(lines, "\n"))
+				if len(matched) != 0 {
+					return tot - len(matched)
+				}
+			}
+		}
+	}
+
+	return nil
 }

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type JSONAnswer struct {
@@ -13,6 +14,13 @@ func (a JSONAnswer) String() string {
 	PanicIfErr(err, "encoding answer to str")
 
 	return string(v)
+}
+
+// Prints v on new lines as json
+func PrintJSON(args ...any) {
+	for _, a := range args {
+		fmt.Println(JSONAnswer{V: a})
+	}
 }
 
 type Iterator[T any] interface {
