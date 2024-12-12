@@ -5,11 +5,16 @@ import "math"
 type XY [2]int
 
 var (
+	DIR_UP    = XY{0, -1}
+	DIR_DOWN  = XY{0, 1}
+	DIR_LEFT  = XY{-1, 0}
+	DIR_RIGHT = XY{1, 0}
+
 	ALL_DIRECT_DIRS = []XY{
-		{0, -1},
-		{1, 0},
-		{0, 1},
-		{-1, 0},
+		DIR_UP,
+		DIR_RIGHT,
+		DIR_DOWN,
+		DIR_LEFT,
 	}
 	ALL_DIRS = []XY{
 		{0, -1},
