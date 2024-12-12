@@ -16,7 +16,7 @@ type State struct {
 }
 
 func (s State) outOfBounds(c utils.XY) bool {
-	return c.OutOfBounds(utils.XY{len(s.Board[0]) - 1, len(s.Board) - 1})
+	return c.OutOfBounds(utils.XY{len(s.Board[0]), len(s.Board)})
 }
 
 // Does 1 action. Either moves or rotates

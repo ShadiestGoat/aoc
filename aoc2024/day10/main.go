@@ -24,7 +24,7 @@ func parseInput(inp string) *State {
 	lines := strings.Split(inp, "\n")
 	return &State{
 		Lines: lines,
-		size:  utils.XY{len(lines[0]) - 1, len(lines) - 1},
+		size:  utils.XY{len(lines[0]), len(lines)},
 	}
 }
 

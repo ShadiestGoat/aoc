@@ -28,7 +28,7 @@ type CoolMatcher struct {
 func (m *CoolMatcher) matchSpecific(offset utils.XY, str []string) bool {
 	for _, rc := range m.Coords {
 		c := rc.Add(offset)
-		if c.OutOfBounds(utils.XY{len(str[0]) - 1, len(str) - 1}) {
+		if c.OutOfBounds(utils.XY{len(str[0]), len(str)}) {
 			return false
 		}
 

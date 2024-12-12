@@ -4,6 +4,37 @@ import "math"
 
 type XY [2]int
 
+var (
+	ALL_DIRECT_DIRS = []XY{
+		{0, -1},
+		{1, 0},
+		{0, 1},
+		{-1, 0},
+	}
+	ALL_DIRS = []XY{
+		{0, -1},
+		{1, -1},
+		{1, 0},
+		{1, 1},
+		{0, 1},
+		{-1, 1},
+		{-1, 0},
+		{-1, -1},
+	}
+)
+
+func getSize[T []E | string, E any](m []T) XY {
+	return XY{len(m[0]), len(m)}
+}
+
+func GetSizeString(m []string) XY {
+	return getSize[string, any](m)
+}
+
+func GetSize[T any](v [][]T) XY {
+	return getSize[[]T, T](v)
+}
+
 func (c XY) Add(c2 XY) XY {
 	return [2]int{c[0] + c2[0], c[1] + c2[1]}
 }
@@ -22,7 +53,7 @@ func (c XY) Copy() XY {
 
 // Checks if c is outside of a box size {size}. This assumes the box is 0, 0 -> point {size}.
 func (c XY) OutOfBounds(size XY) bool {
-	return c[0] < 0 || c[1] < 0 || c[0] > size[0] || c[1] > size[1]
+	return c[0] < 0 || c[1] < 0 || c[0] >= size[0] || c[1] >= size[1]
 }
 
 func (c XY) IsAtOrigin() bool {

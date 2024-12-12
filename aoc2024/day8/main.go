@@ -14,7 +14,7 @@ type State struct {
 
 func (s *State) getAntis(maxPerNodeDirection int, exactMatch bool) int {
 	antis := map[utils.XY]bool{}
-	bounds := utils.XY{len(s.Map[0]) - 1, len(s.Map) - 1}
+	bounds := utils.XY{len(s.Map[0]), len(s.Map)}
 	min := 1
 	if exactMatch {
 		min = 0
