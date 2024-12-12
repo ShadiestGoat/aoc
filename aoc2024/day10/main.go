@@ -24,7 +24,7 @@ func parseInput(inp string) *State {
 	lines := strings.Split(inp, "\n")
 	return &State{
 		Lines: lines,
-		size:  utils.XY{len(lines[0]), len(lines)},
+		size:  utils.GetSizeString(lines),
 	}
 }
 
@@ -51,6 +51,7 @@ func (s *State) CountPaths(cur utils.XY, counted map[utils.XY]bool) int {
 		if n.OutOfBounds(s.size) {
 			continue
 		}
+
 		v := s.valAt(n)
 
 		if v == '.' {
@@ -65,14 +66,15 @@ func (s *State) CountPaths(cur utils.XY, counted map[utils.XY]bool) int {
 
 func (s *State) CountAllPaths(rating bool) int {
 	tot := 0
-	m := map[utils.XY]bool{}
-	if rating {
-		m = nil
-	}
 
 	for y, l := range s.Lines {
 		for x, r := range l {
 			if r == '0' {
+				m := map[utils.XY]bool{}
+				if rating {
+					m = nil
+				}
+
 				tot += s.CountPaths(utils.XY{x, y}, m)
 			}
 		}
