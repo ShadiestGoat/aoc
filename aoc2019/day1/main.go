@@ -2,7 +2,6 @@ package day1
 
 import (
 	"strconv"
-	"strings"
 
 	"github.com/shadiestgoat/aoc/utils"
 )
@@ -18,16 +17,45 @@ func parseLine(l string) int {
 	return v/3 - 2
 }
 
-func Solve1(inp string) any {
+func parseInput(inp string) []int {
+	return utils.SplitAndParseInt(inp, "\n")
+}
+
+func fuelRequirements(fuel int) int {
+	return fuel/3 - 2
+}
+
+func totFuelRequirements(fuel int) int {
+	last := fuelRequirements(fuel)
 	t := 0
 
-	for _, l := range strings.Split(inp, "\n") {
-		t += parseLine(l)
+	for last > 0 {
+		t += last
+
+		last = fuelRequirements(last)
+	}
+
+	return t
+}
+
+func Solve1(inp string) any {
+	allFuel := parseInput(inp)
+	t := 0
+
+	for _, f := range allFuel {
+		t += fuelRequirements(f)
 	}
 
 	return t
 }
 
 func Solve2(inp string) any {
-	return nil
+	allFuel := parseInput(inp)
+	t := 0
+
+	for _, f := range allFuel {
+		t += totFuelRequirements(f)
+	}
+
+	return t
 }
