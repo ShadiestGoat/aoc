@@ -31,3 +31,26 @@ func Solve2(inp string) any {
 	return nil
 }
 EOF
+
+cat > "$DAY_DIR/main_test.go" <<EOF
+package day${1}_test
+
+import (
+	"testing"
+
+	"github.com/shadiestgoat/aoc/aoc$YEAR/day$1"
+	"github.com/shadiestgoat/aoc/utils/tutils"
+)
+
+const INPUT = \`
+
+\`
+
+func TestSolve1(t *testing.T) {
+	tutils.AssertFunc(t, INPUT, day$1.Solve1, VALUE)
+}
+
+// func TestSolve2(t *testing.T) {
+//	tutils.AssertFunc(t, INPUT, day$1.Solve2, VALUE)
+//}
+EOF
