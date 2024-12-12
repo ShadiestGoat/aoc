@@ -25,6 +25,23 @@ func (c XY) OutOfBounds(size XY) bool {
 	return c[0] < 0 || c[1] < 0 || c[0] > size[0] || c[1] > size[1]
 }
 
+func (c XY) IsAtOrigin() bool {
+	return c[0] == 0 && c[1] == 0
+}
+
+func (c XY) Abs() XY {
+	return XY{
+		int(math.Abs(float64(c[0]))),
+		int(math.Abs(float64(c[1]))),
+	}
+}
+
+func (c XY) ManhattanDistance() int {
+	abs := c.Abs()
+
+	return abs[0] + abs[1]
+}
+
 // Used to rate in case of a direction
 // Only works for the case of (-1, 1) directions.
 // Use a multiplication vector to do the rest
