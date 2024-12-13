@@ -24,6 +24,8 @@ func AssertFunc(t *testing.T, inp string, f func(string) any, exp any) {
 func AssertMany(t *testing.T, tests [][2]any, f func (string) any) {
 	for i, cfg := range tests {
 		t.Run(strconv.Itoa(i + 1), func(t *testing.T) {
+			t.Log(cfg[0])
+
 			AssertFunc(t, cfg[0].(string), f, cfg[1])
 		})
 	}
