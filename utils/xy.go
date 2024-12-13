@@ -93,3 +93,7 @@ func (c XY) RotateUnitVector(n int) XY {
 		int(math.Round(float64(c[0])*sin + float64(c[1])*cos)),
 	}
 }
+
+func XYFromArr(arr []int) XY {
+	return XY{arr[0], arr[1]}
+}
