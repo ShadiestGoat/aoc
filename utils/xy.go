@@ -1,6 +1,8 @@
 package utils
 
-import "math"
+import (
+	"math"
+)
 
 type XY [2]int
 
@@ -76,6 +78,10 @@ func (c XY) ManhattanDistance() int {
 	abs := c.Abs()
 
 	return abs[0] + abs[1]
+}
+
+func (c XY) ManhattanDistanceTo(c2 XY) int {
+	return int(math.Abs(float64(c[0] - c2[0])) + math.Abs(float64(c[1] - c2[1])))
 }
 
 // Used to rate in case of a direction
