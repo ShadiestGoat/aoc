@@ -2,7 +2,6 @@ package intcode
 
 import (
 	"math"
-	"slices"
 	"strconv"
 
 	"github.com/shadiestgoat/aoc/utils"
@@ -19,6 +18,7 @@ var (
 		6: 2,
 		7: 3,
 		8: 3,
+		9: 1,
 	}
 	// op -> true, if op writes to last param's addr (tldr: override mechanic)
 	write_ops = map[int]bool{
@@ -30,8 +30,14 @@ var (
 	}
 )
 
-func ParseIntCode(inp string) []int {
-	return utils.SplitAndParseInt(inp, ",")
+func ParseIntCode(inp string) map[int]int {
+	m := map[int]int{}
+
+	for i, v := range utils.SplitAndParseInt(inp, ",") {
+		m[i] = v
+	}
+
+	return m
 }
 
 func intSize(v int) int {
@@ -60,9 +66,10 @@ func parseOp(op int) []int {
 type Computer struct {
 	Input []int
 	Output []int
-	Code []int
+	Code map[int]int
 
 	cur int
+	relativeBase int
 }
 
 func (c *Computer) getParams(amt int, opData []int) []int {
@@ -73,17 +80,25 @@ func (c *Computer) getParams(amt int, opData []int) []int {
 		if i + 1 < len(opData) {
 			m = opData[i + 1]
 		}
+
+		d := c.Code[c.cur + i + 1]
+
 		if write_ops[opData[0]] && i == amt - 1 {
+			if m == 2 {
+				d += c.relativeBase
+			}
+
 			m = 1
 		}
 
-		d := c.Code[c.cur + i + 1]
 
 		switch m {
 		case 0:
 			data = append(data, c.Code[d])
 		case 1:
 			data = append(data, d)
+		case 2:
+			data = append(data, c.Code[d + c.relativeBase])
 		}
 	}
 
@@ -132,6 +147,8 @@ func (c *Computer) doOp() bool {
 			v = 1
 		}
 		c.Code[params[2]] = v
+	case 9:
+		c.relativeBase += params[0]
 	case 99:
 		return false
 	default:
@@ -154,10 +171,15 @@ func (c *Computer) RunIntCode() bool {
 
 // Util function for cloning code & Quickly running the computer.
 // The return value is the output
-func QuickRun(code []int, inp []int) []int {
+func QuickRun(code map[int]int, inp []int) []int {
+	m := map[int]int{}
+	for i, v := range code {
+		m[i] = v
+	}
+
 	comp := &Computer{
 		Input:  inp,
-		Code:   slices.Clone(code),
+		Code:   m,
 	}
 
 	comp.RunIntCode()

@@ -11,6 +11,7 @@ import (
 )
 
 func TestRunIntCode(t *testing.T) {
+	// these tests assume a limited memory!
 	var testCases = [][2]any{
 		{`1,0,0,0,99`, `2,0,0,0,99`},
 		{`2,3,0,3,99`, `2,3,0,6,99`},
@@ -25,7 +26,12 @@ func TestRunIntCode(t *testing.T) {
 		}
 		comp.RunIntCode()
 
-		return strings.Join(utils.Map(comp.Code, strconv.Itoa), ",")
+		arr := make([]int, len(comp.Code))
+		for i, v := range comp.Code {
+			arr[i] = v
+		}
+
+		return strings.Join(utils.Map(arr, strconv.Itoa), ",")
 	})
 
 	var ioTestCases = [][3]any{
@@ -37,6 +43,7 @@ func TestRunIntCode(t *testing.T) {
 		{`3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9`, 999, 1},
 		{`3,3,1105,-1,9,1101,0,0,12,4,12,99,1`, 0, 0},
 		{`3,3,1105,-1,9,1101,0,0,12,4,12,99,1`, 999, 1},
+		{`104,1125899906842624,99`, 0, 1125899906842624},
 	}
 
 	for _, cfg := range ioTestCases {

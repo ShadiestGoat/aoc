@@ -1,7 +1,7 @@
 package day2
 
 import (
-	"slices"
+	"maps"
 
 	"github.com/shadiestgoat/aoc/aoc2019/intcode"
 )
@@ -26,7 +26,7 @@ func Solve2(inp string) any {
 	for i := 0; i <= 99; i++ {
 		// I initially tried to do just i-99, but given that these positions can be referenced by other ops, that doesn't work
 		for j := 0; j <= 99; j++ {
-			tmpCode := slices.Clone(code)
+			tmpCode := maps.Clone(code)
 
 			tmpCode[1] = i
 			tmpCode[2] = j

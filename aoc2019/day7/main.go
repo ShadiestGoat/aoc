@@ -2,6 +2,7 @@ package day7
 
 import (
 	"fmt"
+	"maps"
 	"slices"
 
 	"github.com/shadiestgoat/aoc/aoc2019/intcode"
@@ -56,7 +57,7 @@ func Solve2(inp string) any {
 		for _, phase := range curSetup {
 			allAmps = append(allAmps, &intcode.Computer{
 				Input:  []int{phase},
-				Code:   slices.Clone(code),
+				Code:   maps.Clone(code),
 			})
 		}
 
