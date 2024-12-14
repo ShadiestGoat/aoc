@@ -2,6 +2,7 @@ package intcode
 
 import (
 	"math"
+	"slices"
 	"strconv"
 
 	"github.com/shadiestgoat/aoc/utils"
@@ -89,7 +90,8 @@ func (c *Computer) getParams(amt int, opData []int) []int {
 	return data
 }
 
-func (c *Computer) doOp() {
+// Returns true if can continue
+func (c *Computer) doOp() bool {
 	opData := parseOp(c.Code[c.cur])
 	paramCount := param_amounts[opData[0]]
 
@@ -101,18 +103,22 @@ func (c *Computer) doOp() {
 	case 2:
 		c.Code[params[2]] = params[0] * params[1]
 	case 3:
+		if len(c.Input) == 0 {
+			return false
+		}
 		c.Code[params[0]] = c.Input[0]
+		c.Input = c.Input[1:]
 	case 4:
 		c.Output = append(c.Output, params[0])
 	case 5:
 		if params[0] != 0 {
 			c.cur = params[1]
-			return
+			return true
 		}
 	case 6:
 		if params[0] == 0 {
 			c.cur = params[1]
-			return
+			return true
 		}
 	case 7:
 		v := 0
@@ -127,16 +133,34 @@ func (c *Computer) doOp() {
 		}
 		c.Code[params[2]] = v
 	case 99:
-		return
+		return false
 	default:
 		panic("Unknown op! " + strconv.Itoa(opData[0]))
 	}
 
 	c.cur += paramCount + 1
+
+	return true
 }
 
-func (c *Computer) RunIntCode() {
-	for c.Code[c.cur] != 99 {
-		c.doOp()
+// Runs the code until either theres no more input, but input is needed OR until it halts
+// If it halts, returns true
+func (c *Computer) RunIntCode() bool {
+	for c.doOp() {
 	}
+
+	return c.Code[c.cur] == 99
+}
+
+// Util function for cloning code & Quickly running the computer.
+// The return value is the output
+func QuickRun(code []int, inp []int) []int {
+	comp := &Computer{
+		Input:  inp,
+		Code:   slices.Clone(code),
+	}
+
+	comp.RunIntCode()
+
+	return comp.Output
 }
