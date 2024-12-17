@@ -58,6 +58,20 @@ func (c XY) Copy() XY {
 	return XY{c[0], c[1]}
 }
 
+func unit(v int) int {
+	if v == 0 {
+		return 0
+	} else if v < 0 {
+		return -1
+	}
+
+	return 1
+}
+
+func (c XY) Unit() XY {
+	return XY{unit(c[0]), unit(c[1])}
+}
+
 // Checks if c is outside of a box size {size}. This assumes the box is 0, 0 -> point {size}.
 func (c XY) OutOfBounds(size XY) bool {
 	return c[0] < 0 || c[1] < 0 || c[0] >= size[0] || c[1] >= size[1]
@@ -89,7 +103,7 @@ func (c XY) ManhattanDistanceTo(c2 XY) int {
 // Use a multiplication vector to do the rest
 // The n is the the amount of times to rotate clockwise (-1 means counterclockwise)
 func (c XY) RotateUnitVector(n int) XY {
-	deg := float64(n * 45)
+	deg := float64(n) * math.Pi/4
 
 	cos := math.Cos(deg)
 	sin := math.Sin(deg)
