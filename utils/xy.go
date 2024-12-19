@@ -2,6 +2,7 @@ package utils
 
 import (
 	"math"
+	"strconv"
 )
 
 type XY [2]int
@@ -112,6 +113,10 @@ func (c XY) RotateUnitVector(n int) XY {
 		int(math.Round(float64(c[0])*cos - float64(c[1])*sin)),
 		int(math.Round(float64(c[0])*sin + float64(c[1])*cos)),
 	}
+}
+
+func (c XY) String() string {
+	return strconv.Itoa(c[0]) + "," + strconv.Itoa(c[1])
 }
 
 func XYFromArr(arr []int) XY {
