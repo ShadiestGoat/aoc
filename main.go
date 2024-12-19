@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"strconv"
@@ -14,37 +15,47 @@ import (
 
 //go:generate go run -C ./template . ..
 
+var (
+	FLAG_OFFLINE = flag.Bool("o", false, "Offline (add a cur_day file) <3")
+)
+
+func init() {
+	flag.Parse()
+}
+
 func main() {
 	if solvers.YEAR == "" {
 		panic("Grr and brr bad build... see scripts/run.sh")
 	}
 
 	cookie := os.Getenv("COOKIE")
-
-	if cookie == "" {
-		c, err := os.ReadFile(".conf/.cookie")
-		if err != nil {
-			if errors.Is(err, os.ErrNotExist) {
-				panic("Grrrrrr and brrrr... did you forget to put a cookie in?")
+	if !*FLAG_OFFLINE {
+		if cookie == "" {
+			c, err := os.ReadFile(".conf/.cookie")
+			if err != nil {
+				if errors.Is(err, os.ErrNotExist) {
+					panic("Grrrrrr and brrrr... did you forget to put a cookie in?")
+				}
+				utils.PanicIfErr(err, "reading cookie file")
 			}
-			utils.PanicIfErr(err, "reading cookie file")
+	
+			cookie = strings.TrimSpace(string(c))
 		}
-
-		cookie = strings.TrimSpace(string(c))
 	}
 
-	if len(os.Args) <= 1 || len(os.Args) > 3 {
+	args := flag.Args()
+	if len(args) == 0 || len(args) > 2 {
 		panic("Grr and brr bad arg amt")
 	}
 
-	d, err := strconv.Atoi(os.Args[1])
+	d, err := strconv.Atoi(args[0])
 	if err != nil {
 		panic("Grr and brr -- day isn't right, silly :3")
 	}
 
 	p := 1
-	if len(os.Args) == 3 {
-		part, err := strconv.Atoi(os.Args[2])
+	if len(args) == 2 {
+		part, err := strconv.Atoi(args[1])
 		if err != nil {
 			panic("Grr and brr -- day part isn't right, silly girl :33")
 		}
@@ -61,7 +72,16 @@ func main() {
 	}
 
 	fmt.Println("(1/2) Fetching Input...")
-	inp := fetchInput(d, cookie)
+	var inp string
+
+	if *FLAG_OFFLINE {
+		tInp, err := os.ReadFile("cur_day")
+		utils.PanicIfErr(err, "reading cur_day file")
+		inp = string(tInp)
+	} else {
+		inp = fetchInput(d, cookie)
+	}
+
 	fmt.Println("---> Fetched")
 
 	fmt.Println("(2/2) Solving...")

@@ -1,3 +1,4 @@
 .conf/*
 aoc*/solvers.go
 solvers/*.go
+cur_day
