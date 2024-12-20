@@ -1,8 +1,8 @@
 #!/bin/sh
 
-DAY="$(/bin/ls -d ./aoc2024/day* | wc -w)"
-DAY="$(($DAY + 1))"
 YEAR="$(cat .conf/.year)"
+DAY="$(/bin/ls -d ./aoc$YEAR/day* | wc -w)"
+DAY="$(($DAY + 1))"
 YEAR_DIR="$(dirname $0)/../aoc$YEAR"
 DAY_DIR="$YEAR_DIR/day$DAY"
 
