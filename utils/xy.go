@@ -13,21 +13,32 @@ var (
 	DIR_LEFT  = XY{-1, 0}
 	DIR_RIGHT = XY{1, 0}
 
+	DIR_DIAG_NE = XY{1, -1}
+	DIR_DIAG_SE = XY{1, 1}
+	DIR_DIAG_SW = XY{-1, 1}
+	DIR_DIAG_NW = XY{-1, -1}
+
 	ALL_DIRECT_DIRS = []XY{
 		DIR_UP,
 		DIR_RIGHT,
 		DIR_DOWN,
 		DIR_LEFT,
 	}
+	ALL_DIAGONALS = []XY{
+		DIR_DIAG_NE,
+		DIR_DIAG_SE,
+		DIR_DIAG_SW,
+		DIR_DIAG_NW,
+	}
 	ALL_DIRS = []XY{
-		{0, -1},
-		{1, -1},
-		{1, 0},
-		{1, 1},
-		{0, 1},
-		{-1, 1},
-		{-1, 0},
-		{-1, -1},
+		DIR_UP,
+		DIR_DIAG_NE,
+		DIR_RIGHT,
+		DIR_DIAG_SE,
+		DIR_DOWN,
+		DIR_DIAG_SW,
+		DIR_LEFT,
+		DIR_DIAG_NW,
 	}
 )
 
