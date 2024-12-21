@@ -126,6 +126,24 @@ func (c XY) RotateUnitVector(n int) XY {
 	}
 }
 
+// Returns quadrant this coord is in. Uses -y as up.
+// 3 0
+// 2 1
+func (c XY) Quadrant() int {
+	switch c.Unit() {
+	case XY{0, -1}, XY{1, -1}:
+		return 0
+	case XY{1, 0}, XY{1, 1}:
+		return 1
+	case XY{0, 1}, XY{-1, 1}:
+		return 2
+	case XY{-1, 0}, XY{-1, -1}:
+		return 3
+	}
+
+	return -1
+}
+
 func (c XY) String() string {
 	return strconv.Itoa(c[0]) + "," + strconv.Itoa(c[1])
 }
