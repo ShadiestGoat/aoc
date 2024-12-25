@@ -44,8 +44,8 @@ type State struct {
 	swaps []string
 }
 
-func (s State) getNum(prefix rune) int64 {
-	o := int64(0)
+func (s State) getNum(prefix rune) int {
+	o := 0
 	for k, v := range s.Nums {
 		if k[0] != byte(prefix) || !v {
 			continue
@@ -223,7 +223,7 @@ func Solve2(inp string) any {
 
 	for {
 		s.DoAll()
-		res, z := int64(s.getNum('x') + s.getNum('y')), int64(s.getNum('z'))
+		res, z := s.getNum('x') + s.getNum('y'), s.getNum('z')
 		if res == z {
 			break
 		}
