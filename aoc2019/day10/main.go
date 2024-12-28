@@ -24,31 +24,12 @@ type World struct {
 	Size utils.XY
 }
 
-func gcd(a, b int) int {
-	if a < 0 {
-		a = -a
-	}
-	if b < 0 {
-		b = -b
-	}
-
-	for a != 0 && b != 0 {
-		if a > b {
-			a %= b
-		} else {
-			b %= a
-		}
-	}
-
-	return a | b
-}
-
 func (w World) countFrom(og utils.XY) (int, []utils.XY) {
 	seen := 0
 	testedSlopes := map[utils.XY]bool{}
 
 	testOffset := func (x, y int) {
-		d := gcd(x, y)
+		d := utils.GCD(x, y)
 
 		off := utils.XY{x/d, y/d}
 		if testedSlopes[off] {

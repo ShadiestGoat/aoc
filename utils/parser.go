@@ -72,3 +72,29 @@ func Map[T any, V any](s []T, h func (T) V) []V {
 
 	return nv
 }
+
+func Reduce[T any, R any](initial R, arr []T, f func (acc R, cur T) R) R {
+	acc := initial
+
+	for _, v := range arr {
+		acc = f(acc, v)
+	}
+
+	return acc
+}
+
+func Sum(arr []int) int {
+	return Reduce(0, arr, func(acc int, cur int) int {
+		return acc + cur
+	})
+}
+
+func AbsSum(arr []int) int {
+	return Reduce(0, arr, func(acc, cur int) int {
+		if cur < 0 {
+			cur = -cur
+		}
+
+		return acc + cur
+	})
+}
