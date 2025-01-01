@@ -169,6 +169,12 @@ func (c *Computer) RunIntCode() bool {
 	return c.Code[c.cur] == 99
 }
 
+func (c *Computer) ConsumeOutput() []int {
+	o := c.Output
+	c.Output = []int{}
+	return o
+}
+
 // Util function for cloning code & Quickly running the computer.
 // The return value is the output
 func QuickRun(code map[int]int, inp []int) []int {
@@ -185,4 +191,12 @@ func QuickRun(code map[int]int, inp []int) []int {
 	comp.RunIntCode()
 
 	return comp.Output
+}
+
+func NewComp(inp string) *Computer {
+	return &Computer{
+		Input:        []int{},
+		Output:       []int{},
+		Code:         ParseIntCode(inp),
+	}
 }

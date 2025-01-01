@@ -151,3 +151,24 @@ func (c XY) String() string {
 func XYFromArr(arr []int) XY {
 	return XY{arr[0], arr[1]}
 }
+
+func MinMaxOfCoords(coords []XY) (XY, XY) {
+	min, max := coords[0], coords[0]
+
+	for _, c := range coords[1:] {
+		if c[0] < min[0] {
+			min[0] = c[0]
+		}
+		if c[1] < min[1] {
+			min[1] = c[1]
+		}
+		if c[0] > max[0] {
+			max[0] = c[0]
+		}
+		if c[1] > max[1] {
+			max[1] = c[1]
+		}
+	}
+
+	return min, max
+}

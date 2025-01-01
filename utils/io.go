@@ -52,3 +52,8 @@ func NewScannerUtil[T any](h IteratorFunc[T]) Iterator[T] {
 		h: h,
 	}
 }
+
+func ClearAndPrint(v string) {
+	fmt.Print(string([]rune{27, '[', '3', 'J', 27, '[', ';', 'H'}))
+	fmt.Println(v)
+}
