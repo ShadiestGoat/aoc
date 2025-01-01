@@ -3,7 +3,7 @@ package day3
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/funiter"
 )
 
 const (
@@ -33,7 +33,7 @@ func (s *SledPath) Value() byte {
 	return s.Map[baseI+s.i*(s.lineSize+1)*s.slopeY]
 }
 
-func parseInput(inp string, slopeX, slopeY int) utils.Iterator[byte] {
+func parseInput(inp string, slopeX, slopeY int) funiter.Iterator[byte] {
 	inp = strings.TrimSpace(inp)
 
 	return &SledPath{

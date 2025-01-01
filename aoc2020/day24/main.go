@@ -3,11 +3,11 @@ package day24
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 var (
-	ALL_DIRS = []utils.XY{
+	ALL_DIRS = []xy.XY{
 		{-2, 0},
 		{2, 0},
 		{-1, -1},
@@ -21,18 +21,18 @@ func isModifier(r rune) bool {
 	return r == 's' || r == 'n'
 }
 
-func ParseInput(inp string) [][]utils.XY {
+func ParseInput(inp string) [][]xy.XY {
 	lines := strings.Split(inp, "\n")
-	o := [][]utils.XY{}
+	o := [][]xy.XY{}
 
 	for _, l := range lines {
-		dirs := []utils.XY{}
+		dirs := []xy.XY{}
 
 		for i, r := range l {
 			if isModifier(r) {
 				continue
 			}
-	
+
 			x, y := 1, 0
 			if r == 'w' {
 				x = -1
@@ -40,7 +40,7 @@ func ParseInput(inp string) [][]utils.XY {
 
 			lastIsModifier := false
 			if i > 0 {
-				lastR := rune(l[i - 1])
+				lastR := rune(l[i-1])
 
 				if isModifier(lastR) {
 					lastIsModifier = true
@@ -57,7 +57,7 @@ func ParseInput(inp string) [][]utils.XY {
 				x *= 2
 			}
 
-			dirs = append(dirs, utils.XY{x, y})
+			dirs = append(dirs, xy.XY{x, y})
 		}
 
 		o = append(o, dirs)
@@ -66,8 +66,8 @@ func ParseInput(inp string) [][]utils.XY {
 	return o
 }
 
-func DoDirs(dirs []utils.XY) utils.XY {
-	cur := utils.XY{}
+func DoDirs(dirs []xy.XY) xy.XY {
+	cur := xy.XY{}
 
 	for _, v := range dirs {
 		cur = cur.Add(v)
@@ -76,8 +76,8 @@ func DoDirs(dirs []utils.XY) utils.XY {
 	return cur
 }
 
-func createInitialMap(dirs [][]utils.XY) map[utils.XY]bool {
-	o := map[utils.XY]bool{}
+func createInitialMap(dirs [][]xy.XY) map[xy.XY]bool {
+	o := map[xy.XY]bool{}
 
 	for _, d := range dirs {
 		f := DoDirs(d)
@@ -99,7 +99,7 @@ func Solve1(inp string) any {
 	return len(m)
 }
 
-func countBlackTileAroundCoord(state map[utils.XY]bool, coord utils.XY) int {
+func countBlackTileAroundCoord(state map[xy.XY]bool, coord xy.XY) int {
 	c := 0
 
 	for _, d := range ALL_DIRS {
@@ -111,9 +111,9 @@ func countBlackTileAroundCoord(state map[utils.XY]bool, coord utils.XY) int {
 	return c
 }
 
-func playGame(state map[utils.XY]bool, moves int) map[utils.XY]bool {
+func playGame(state map[xy.XY]bool, moves int) map[xy.XY]bool {
 	for i := 0; i < moves; i++ {
-		newState := map[utils.XY]bool{}
+		newState := map[xy.XY]bool{}
 
 		for b, sc := range state {
 			if !sc {

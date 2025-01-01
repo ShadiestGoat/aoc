@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func evalBraces(line *string, doMath func(string) int) bool {
@@ -33,7 +33,7 @@ func DoMathLTR(line string) int {
 	line = strings.ReplaceAll(line, " ", "")
 
 	i := strings.IndexAny(line, "+*")
-	cur := utils.ParseInt(line[:i])
+	cur := sparse.ParseInt(line[:i])
 	line = line[i:]
 
 	for {
@@ -48,7 +48,7 @@ func DoMathLTR(line string) int {
 			nextIndex++
 		}
 
-		nextNum := utils.ParseInt(line[1:nextIndex])
+		nextNum := sparse.ParseInt(line[1:nextIndex])
 
 		if line[0] == '*' {
 			cur *= nextNum
@@ -75,8 +75,8 @@ func mathPlusParser(line *string, sym string, op func(a, b int) int) {
 
 		replaceStr(line, strconv.Itoa(
 			op(
-				utils.ParseInt((*line)[iMin+1:i]),
-				utils.ParseInt((*line)[i+1:iMax]),
+				sparse.ParseInt((*line)[iMin+1:i]),
+				sparse.ParseInt((*line)[i+1:iMax]),
 			),
 		), iMin+1, iMax-1)
 	}
@@ -95,7 +95,7 @@ func DoMathPlus(line string) int {
 		return a * b
 	})
 
-	return utils.ParseInt(line)
+	return sparse.ParseInt(line)
 }
 
 func solve(inp string, doMath func(string) int) int {

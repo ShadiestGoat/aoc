@@ -4,26 +4,29 @@ import (
 	"github.com/RyanCarrier/dijkstra/v2"
 	"github.com/shadiestgoat/aoc/aoc2019/intcode"
 	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xarr"
+	"github.com/shadiestgoat/aoc/utils/xprint"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
-var dirToI = map[utils.XY]int{
-	utils.DIR_UP: 1,
-	utils.DIR_DOWN: 2,
-	utils.DIR_LEFT: 3,
-	utils.DIR_RIGHT: 4,
+var dirToI = map[xy.XY]int{
+	xy.DIR_UP:    1,
+	xy.DIR_DOWN:  2,
+	xy.DIR_LEFT:  3,
+	xy.DIR_RIGHT: 4,
 }
 
-func draw(pos utils.XY, walls map[utils.XY]bool) {
-	min, max := utils.MinMaxOfCoords(append(utils.MapKeys(walls), pos))
+func draw(pos xy.XY, walls map[xy.XY]bool) {
+	min, max := xy.MinMaxOfCoords(append(xarr.MapKeys(walls), pos))
 
 	width := max[0] - min[0]
 
 	str := ""
 	for y := min[1]; y <= max[1]; y++ {
-		r := make([]rune, width + 1)
+		r := make([]rune, width+1)
 
-		for i, x := 0, min[0]; x <= max[0]; x, i = x + 1, i + 1 {
-			if walls[utils.XY{x, y}] {
+		for i, x := 0, min[0]; x <= max[0]; x, i = x+1, i+1 {
+			if walls[xy.XY{x, y}] {
 				r[i] = '#'
 			} else {
 				r[i] = ' '
@@ -31,23 +34,23 @@ func draw(pos utils.XY, walls map[utils.XY]bool) {
 		}
 
 		if y == pos[1] {
-			r[pos[0] - min[0]] = 'O'
+			r[pos[0]-min[0]] = 'O'
 		}
 
 		str += "\n" + string(r)
 	}
 
-	utils.ClearAndPrint(str[1:])
+	xprint.ClearAndPrint(str[1:])
 }
 
-type MoveFunc = func (dir utils.XY) int
+type MoveFunc = func(dir xy.XY) int
 
-func findMap(f MoveFunc) (map[utils.XY]bool, utils.XY) {
-	walls := map[utils.XY]bool{}
+func findMap(f MoveFunc) (map[xy.XY]bool, xy.XY) {
+	walls := map[xy.XY]bool{}
 
-	curPos := utils.XY{}
-	dir := utils.DIR_UP
-	endPos := utils.XY{}
+	curPos := xy.XY{}
+	dir := xy.DIR_UP
+	endPos := xy.XY{}
 
 	next := false
 	for {
@@ -64,7 +67,6 @@ func findMap(f MoveFunc) (map[utils.XY]bool, utils.XY) {
 			endPos = np
 		}
 
-		
 		curPos = np
 		if next {
 			return walls, endPos
@@ -80,21 +82,21 @@ func findMap(f MoveFunc) (map[utils.XY]bool, utils.XY) {
 func GenericSolve1(f MoveFunc) int {
 	walls, endPos := findMap(f)
 
-	g := dijkstra.NewMappedGraph[utils.XY]()
+	g := dijkstra.NewMappedGraph[xy.XY]()
 
-	min, max := utils.MinMaxOfCoords(append(utils.MapKeys(walls), endPos, utils.XY{}))
-	min = min.Add(utils.XY{-1, -1})
-	max = max.Add(utils.XY{1, 1})
+	min, max := xy.MinMaxOfCoords(append(xarr.MapKeys(walls), endPos, xy.XY{}))
+	min = min.Add(xy.XY{-1, -1})
+	max = max.Add(xy.XY{1, 1})
 
 	for y := min[1]; y <= max[1]; y++ {
 		for x := min[0]; x <= max[0]; x++ {
-			c := utils.XY{x, y}
+			c := xy.XY{x, y}
 			if walls[c] {
 				continue
 			}
 
-			arcs := map[utils.XY]uint64{}
-			for _, d := range utils.ALL_DIRECT_DIRS {
+			arcs := map[xy.XY]uint64{}
+			for _, d := range xy.ALL_DIRECT_DIRS {
 				if walls[c.Add(d)] {
 					continue
 				}
@@ -106,7 +108,7 @@ func GenericSolve1(f MoveFunc) int {
 		}
 	}
 
-	p, err := g.Shortest(utils.XY{}, endPos)
+	p, err := g.Shortest(xy.XY{}, endPos)
 	utils.PanicIfErr(err, "searching for path")
 
 	return int(p.Distance)
@@ -115,14 +117,14 @@ func GenericSolve1(f MoveFunc) int {
 func GenericSolve2(f MoveFunc) int {
 	walls, endPos := findMap(f)
 
-	curs := []utils.XY{endPos}
+	curs := []xy.XY{endPos}
 
 	i := 0
 	for len(curs) != 0 {
-		newCurs := []utils.XY{}
+		newCurs := []xy.XY{}
 
 		for _, c := range curs {
-			for _, d := range utils.ALL_DIRECT_DIRS {
+			for _, d := range xy.ALL_DIRECT_DIRS {
 				nc := c.Add(d)
 				if walls[nc] {
 					continue
@@ -142,10 +144,10 @@ func GenericSolve2(f MoveFunc) int {
 	return i
 }
 
-func genericSolveX(inp string, solver func (MoveFunc) int) int {
+func genericSolveX(inp string, solver func(MoveFunc) int) int {
 	comp := intcode.NewComp(inp)
 
-	return solver(func(dir utils.XY) int {
+	return solver(func(dir xy.XY) int {
 		comp.Input = []int{dirToI[dir]}
 		comp.RunIntCode()
 		return comp.ConsumeOutput()[0]

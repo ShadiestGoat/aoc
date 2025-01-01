@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func parseInput(inp string) []int {
@@ -12,10 +12,10 @@ func parseInput(inp string) []int {
 
 	fID := 0
 	for i, r := range inp {
-		size := utils.ParseInt(string(r))
+		size := sparse.ParseInt(string(r))
 		v := -1
 
-		if i % 2 == 0 {
+		if i%2 == 0 {
 			v = fID
 			fID++
 		}
@@ -106,8 +106,8 @@ func Solve2(inp string) any {
 			}
 
 			for k := 0; k < blockSize; k++ {
-				disk[j + k] = disk[i - k]
-				disk[i - k] = -1
+				disk[j+k] = disk[i-k]
+				disk[i-k] = -1
 			}
 
 			break

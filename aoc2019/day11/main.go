@@ -4,27 +4,27 @@ import (
 	"slices"
 
 	"github.com/shadiestgoat/aoc/aoc2019/intcode"
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 type Robot struct {
-	Dir utils.XY
-	Pos utils.XY
+	Dir  xy.XY
+	Pos  xy.XY
 	comp *intcode.Computer
 }
 
 func parseInput(inp string) *Robot {
 	return &Robot{
-		Dir:  utils.DIR_UP,
-		Pos:  utils.XY{},
+		Dir: xy.DIR_UP,
+		Pos: xy.XY{},
 		comp: &intcode.Computer{
-			Code:   intcode.ParseIntCode(inp),
+			Code: intcode.ParseIntCode(inp),
 		},
 	}
 }
 
 // Return true if the program completes
-func (r *Robot) RunOnce(w map[utils.XY]int) bool {
+func (r *Robot) RunOnce(w map[xy.XY]int) bool {
 	r.comp.Input = append(r.comp.Input, w[r.Pos])
 	exitEarly := r.comp.RunIntCode()
 
@@ -45,7 +45,7 @@ func (r *Robot) RunOnce(w map[utils.XY]int) bool {
 
 func Solve1(inp string) any {
 	r := parseInput(inp)
-	w := map[utils.XY]int{}
+	w := map[xy.XY]int{}
 	for !r.RunOnce(w) {
 
 	}
@@ -63,15 +63,15 @@ func diff(a, b int) int {
 
 func Solve2(inp string) any {
 	r := parseInput(inp)
-	w := map[utils.XY]int{
+	w := map[xy.XY]int{
 		r.Pos: 1,
 	}
 	for !r.RunOnce(w) {
 
 	}
 
-	min := utils.XY{}
-	max := utils.XY{}
+	min := xy.XY{}
+	max := xy.XY{}
 	inited := false
 
 	for p := range w {
@@ -105,7 +105,7 @@ func Solve2(inp string) any {
 
 	for y := 0; y < sizeY; y++ {
 		for x := 0; x < sizeX; x++ {
-			c := utils.XY{x, y}.Add(min.Mul(-1))
+			c := xy.XY{x, y}.Add(min.Mul(-1))
 			if w[c] == 0 {
 				continue
 			}

@@ -3,7 +3,7 @@ package day9
 import (
 	"slices"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func ValidateInput(_pre []int, v int) bool {
@@ -37,7 +37,7 @@ func mostGenericSolver1(inp []int, size int) int {
 }
 
 func GenericSolver1(inp string, size int) int {
-	return mostGenericSolver1(utils.SplitAndParseInt(inp, "\n"), size)
+	return mostGenericSolver1(sparse.SplitAndParseInt(inp, "\n"), size)
 }
 
 func Solve1(inp string) any {
@@ -65,7 +65,7 @@ func GenericSolver2(inp []int, badNum int) (int, int) {
 }
 
 func Solve2(inp string) any {
-	parsed := utils.SplitAndParseInt(inp, "\n")
+	parsed := sparse.SplitAndParseInt(inp, "\n")
 
 	badNum := mostGenericSolver1(parsed, 25)
 

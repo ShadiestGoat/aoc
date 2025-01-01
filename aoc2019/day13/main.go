@@ -4,18 +4,18 @@ import (
 	"fmt"
 
 	"github.com/shadiestgoat/aoc/aoc2019/intcode"
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
-func initialMap(inp string) map[utils.XY]int {
+func initialMap(inp string) map[xy.XY]int {
 	o := intcode.QuickRun(intcode.ParseIntCode(inp), nil)
 	return parseOutput(o)
 }
 
-func parseOutput(o []int) map[utils.XY]int {
-	obj := map[utils.XY]int{}
+func parseOutput(o []int) map[xy.XY]int {
+	obj := map[xy.XY]int{}
 	for i := 0; i < len(o); i += 3 {
-		obj[utils.XY{o[i], o[i + 1]}] = o[i + 2]
+		obj[xy.XY{o[i], o[i+1]}] = o[i+2]
 	}
 
 	return obj
@@ -34,7 +34,7 @@ func Solve1(inp string) any {
 
 var tileMapTrans = [5]rune{' ', '█', '▣', '▔', 'O'}
 
-func drawMap(base map[utils.XY]int, player, ball utils.XY) {
+func drawMap(base map[xy.XY]int, player, ball xy.XY) {
 	maxX, maxY := 0, 0
 
 	for c := range base {
@@ -49,9 +49,9 @@ func drawMap(base map[utils.XY]int, player, ball utils.XY) {
 
 	lines := ""
 	for y := 0; y <= maxY; y++ {
-		l := make([]rune, maxX + 1)
+		l := make([]rune, maxX+1)
 		for x := 0; x <= maxX; x++ {
-			l[x] = tileMapTrans[base[utils.XY{x, y}]]
+			l[x] = tileMapTrans[base[xy.XY{x, y}]]
 		}
 
 		if player[1] == y {
@@ -72,18 +72,18 @@ func Solve2(inp string) any {
 	code[0] = 2
 
 	comp := &intcode.Computer{
-		Input:  []int{},
-		Code:   code,
+		Input: []int{},
+		Code:  code,
 	}
 	comp.RunIntCode()
 
-	playerPos := utils.XY{}
-	ballPos := utils.XY{}
+	playerPos := xy.XY{}
+	ballPos := xy.XY{}
 	for i := 0; i < len(comp.Output); i += 3 {
-		if comp.Output[i + 2] == 3 {
-			playerPos = utils.XY{comp.Output[i], comp.Output[i + 1]}
-		} else if comp.Output[i + 2] == 4 {
-			ballPos = utils.XY{comp.Output[i], comp.Output[i + 1]}
+		if comp.Output[i+2] == 3 {
+			playerPos = xy.XY{comp.Output[i], comp.Output[i+1]}
+		} else if comp.Output[i+2] == 4 {
+			ballPos = xy.XY{comp.Output[i], comp.Output[i+1]}
 		}
 
 		if !playerPos.IsAtOrigin() && !ballPos.IsAtOrigin() {
@@ -95,17 +95,16 @@ func Solve2(inp string) any {
 	m[playerPos] = 0
 	m[ballPos] = 0
 
-	
 	comp.Output = []int{-1, -1, 0, ballPos[0], ballPos[1], 4}
 	comp.Input = []int{}
 	score := 0
 
 	for {
 		for i := 0; i < len(comp.Output); i += 3 {
-			if comp.Output[i + 2] == 0 {
-				delete(m, utils.XY{comp.Output[i], comp.Output[i + 1]})
-			} else if comp.Output[i] == -1 && comp.Output[i + 1] == 0 {
-				score = comp.Output[i + 2]
+			if comp.Output[i+2] == 0 {
+				delete(m, xy.XY{comp.Output[i], comp.Output[i+1]})
+			} else if comp.Output[i] == -1 && comp.Output[i+1] == 0 {
+				score = comp.Output[i+2]
 			}
 		}
 
@@ -118,13 +117,13 @@ func Solve2(inp string) any {
 		}
 
 		if !hasBlock {
-			break	
+			break
 		}
 
-		// lastPos := utils.XY{comp.Output[0], comp.Output[1]}
-		ballPos := utils.XY{comp.Output[len(comp.Output) - 3], comp.Output[len(comp.Output) - 2]}
+		// lastPos := xy.XY{comp.Output[0], comp.Output[1]}
+		ballPos := xy.XY{comp.Output[len(comp.Output)-3], comp.Output[len(comp.Output)-2]}
 		diff := ballPos.Add(playerPos.Mul(-1)).Unit()
-		
+
 		comp.Input = append(comp.Input, diff[0])
 		comp.Output = []int{}
 		playerPos[0] += diff[0]

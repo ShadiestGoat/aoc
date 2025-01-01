@@ -4,11 +4,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xarr"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 type Warehouse struct {
-	Pos utils.XY
+	Pos xy.XY
 	Map [][]rune
 }
 
@@ -22,15 +23,15 @@ func (w *Warehouse) mapBackup() [][]rune {
 	return c
 }
 
-func (w *Warehouse) tileAt(c utils.XY) rune {
-	if c.OutOfBounds(utils.GetSize(w.Map)) {
+func (w *Warehouse) tileAt(c xy.XY) rune {
+	if c.OutOfBounds(xy.GetSize(w.Map)) {
 		return '#'
 	}
 
 	return w.Map[c[1]][c[0]]
 }
 
-func (w *Warehouse) moveTile(toMove utils.XY, dir utils.XY, noPairRecurse bool) bool {
+func (w *Warehouse) moveTile(toMove xy.XY, dir xy.XY, noPairRecurse bool) bool {
 	tTile := w.tileAt(toMove)
 	nCoord := toMove.Add(dir)
 	nextTile := w.tileAt(nCoord)
@@ -50,7 +51,7 @@ func (w *Warehouse) moveTile(toMove utils.XY, dir utils.XY, noPairRecurse bool) 
 			x = -1
 		}
 
-		if !w.moveTile(toMove.Add(utils.XY{x}), dir, true) {
+		if !w.moveTile(toMove.Add(xy.XY{x}), dir, true) {
 			return false
 		}
 	}
@@ -61,7 +62,7 @@ func (w *Warehouse) moveTile(toMove utils.XY, dir utils.XY, noPairRecurse bool) 
 	return true
 }
 
-func (w *Warehouse) Move(dir utils.XY) {
+func (w *Warehouse) Move(dir xy.XY) {
 	next := w.Pos.Add(dir)
 
 	switch w.Map[next[1]][next[0]] {
@@ -97,24 +98,24 @@ func (w Warehouse) String() string {
 	return str[1:]
 }
 
-func parseDirs(inp string) []utils.XY {
-	return utils.Map([]rune(strings.Join(strings.Split(inp, "\n"), "")), func(r rune) utils.XY {
+func parseDirs(inp string) []xy.XY {
+	return xarr.Map([]rune(strings.Join(strings.Split(inp, "\n"), "")), func(r rune) xy.XY {
 		switch r {
 		case '^':
-			return utils.DIR_UP
+			return xy.DIR_UP
 		case 'v':
-			return utils.DIR_DOWN
+			return xy.DIR_DOWN
 		case '<':
-			return utils.DIR_LEFT
+			return xy.DIR_LEFT
 		case '>':
-			return utils.DIR_RIGHT
+			return xy.DIR_RIGHT
 		}
 
-		return utils.XY{}
+		return xy.XY{}
 	})
 }
 
-func parseInput1(inp string) (*Warehouse, []utils.XY) {
+func parseInput1(inp string) (*Warehouse, []xy.XY) {
 	w := &Warehouse{
 		Pos: [2]int{},
 		Map: [][]rune{},
@@ -127,7 +128,7 @@ func parseInput1(inp string) (*Warehouse, []utils.XY) {
 		robotIndex := slices.Index(arr, '@')
 		if robotIndex != -1 {
 			arr[robotIndex] = '.'
-			w.Pos = utils.XY{robotIndex, y}
+			w.Pos = xy.XY{robotIndex, y}
 		}
 
 		w.Map = append(w.Map, arr)
@@ -136,7 +137,7 @@ func parseInput1(inp string) (*Warehouse, []utils.XY) {
 	return w, parseDirs(spl[1])
 }
 
-func parseInput2(inp string) (*Warehouse, []utils.XY) {
+func parseInput2(inp string) (*Warehouse, []xy.XY) {
 	w := &Warehouse{
 		Pos: [2]int{},
 		Map: [][]rune{},
@@ -149,7 +150,7 @@ func parseInput2(inp string) (*Warehouse, []utils.XY) {
 		robotIndex := slices.Index(arr, '@')
 		if robotIndex != -1 {
 			arr[robotIndex] = '.'
-			w.Pos = utils.XY{robotIndex * 2, y}
+			w.Pos = xy.XY{robotIndex * 2, y}
 		}
 
 		curLines := []rune{}
@@ -174,7 +175,7 @@ func (w Warehouse) getAnswer() int {
 	for y, l := range w.Map {
 		for x, v := range l {
 			if v == 'O' || v == '[' {
-				t += y * 100 + x
+				t += y*100 + x
 			}
 		}
 	}

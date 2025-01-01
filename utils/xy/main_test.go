@@ -1,15 +1,15 @@
-package utils_test
+package xy_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 	"github.com/shadiestgoat/aoc/utils/tutils"
 )
 
 func TestRotateUnitVector(t *testing.T) {
-	for ogI, ogD := range utils.ALL_DIRS {
+	for ogI, ogD := range xy.ALL_DIRS {
 		for i := -8; i <= 8; i++ {
 			t.Run(fmt.Sprintf("%v rot %d", ogD, i), func(t *testing.T) {
 				expI := (ogI + i) % 8
@@ -17,7 +17,7 @@ func TestRotateUnitVector(t *testing.T) {
 					expI += 8
 				}
 
-				tutils.Assert(t, utils.ALL_DIRS[expI], ogD.RotateUnitVector(i))
+				tutils.Assert(t, xy.ALL_DIRS[expI], ogD.RotateUnitVector(i))
 			})
 		}
 	}

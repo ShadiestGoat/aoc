@@ -3,14 +3,15 @@ package day14
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 // !! wow thats a lot
 const PART_2_ORE = 1_000_000_000_000
 
 type Cache struct {
-	Count int
+	Count     int
 	BankLefts map[string]int
 }
 
@@ -26,7 +27,7 @@ type Rule struct {
 }
 
 type Req struct {
-	Elm string
+	Elm   string
 	Count int
 }
 
@@ -34,20 +35,20 @@ func parseReq(s string) Req {
 	spl := strings.Split(s, " ")
 	return Req{
 		Elm:   spl[1],
-		Count: utils.ParseInt(spl[0]),
+		Count: sparse.ParseInt(spl[0]),
 	}
 }
 
 func parseInput(inp string) *State {
 	s := &State{
-		rules:    map[string]*Rule{},
+		rules: map[string]*Rule{},
 	}
 
 	for _, l := range strings.Split(inp, "\n") {
 		spl := strings.Split(l, " => ")
 		r := &Rule{
 			Req:  parseReq(spl[1]),
-			Reqs: utils.SplitAndParseFunc(spl[0], ", ", parseReq),
+			Reqs: sparse.SplitAndParseFunc(spl[0], ", ", parseReq),
 		}
 
 		s.rules[r.Elm] = r
@@ -65,9 +66,9 @@ func (s State) oreAmount(fuelAmount int) int {
 	bank := map[string]int{}
 
 	for len(queue) != 0 {
-		cur := queue[len(queue) - 1]
+		cur := queue[len(queue)-1]
 		if cur.Elm == "ORE" {
-			queue = queue[:len(queue) - 1]
+			queue = queue[:len(queue)-1]
 			ore += cur.Count
 			continue
 		}
@@ -83,20 +84,20 @@ func (s State) oreAmount(fuelAmount int) int {
 			}
 		}
 
-		queue = queue[:len(queue) - 1]
+		queue = queue[:len(queue)-1]
 		if cur.Count == 0 {
 			continue
 		}
 
 		r := s.rules[cur.Elm]
-		mul := cur.Count/r.Count
+		mul := cur.Count / r.Count
 
-		if cur.Count % r.Count != 0 {
+		if cur.Count%r.Count != 0 {
 			mul++
 			bank[cur.Elm] = (mul * r.Count) - cur.Count
 		}
 
-		queue = append(queue, utils.Map(r.Reqs, func(r Req) Req { r.Count *= mul; return r })...)
+		queue = append(queue, xarr.Map(r.Reqs, func(r Req) Req { r.Count *= mul; return r })...)
 	}
 
 	return ore
@@ -113,7 +114,7 @@ func Solve2(inp string) any {
 
 	forOneFuel := s.oreAmount(1)
 
-	minBoundary := PART_2_ORE/forOneFuel
+	minBoundary := PART_2_ORE / forOneFuel
 	maxBoundary := minBoundary + minBoundary/4
 
 	found := 0
@@ -122,12 +123,12 @@ func Solve2(inp string) any {
 			found = minBoundary
 			break
 		}
-		if maxBoundary - minBoundary == 1 {
+		if maxBoundary-minBoundary == 1 {
 			found = minBoundary
 			break
 		}
 
-		mid := minBoundary + (maxBoundary - minBoundary)/2
+		mid := minBoundary + (maxBoundary-minBoundary)/2
 
 		curOre := s.oreAmount(mid)
 		if curOre == PART_2_ORE {

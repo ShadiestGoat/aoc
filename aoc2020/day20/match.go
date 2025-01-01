@@ -3,7 +3,7 @@ package day20
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 func coolMatchLine(str string, match string) bool {
@@ -21,14 +21,14 @@ func coolMatchLine(str string, match string) bool {
 }
 
 type CoolMatcher struct {
-	Coords []utils.XY
-	maxX int
+	Coords []xy.XY
+	maxX   int
 }
 
-func (m *CoolMatcher) matchSpecific(offset utils.XY, str []string) bool {
+func (m *CoolMatcher) matchSpecific(offset xy.XY, str []string) bool {
 	for _, rc := range m.Coords {
 		c := rc.Add(offset)
-		if c.OutOfBounds(utils.XY{len(str[0]), len(str)}) {
+		if c.OutOfBounds(xy.XY{len(str[0]), len(str)}) {
 			return false
 		}
 
@@ -40,14 +40,14 @@ func (m *CoolMatcher) matchSpecific(offset utils.XY, str []string) bool {
 	return true
 }
 
-func (m *CoolMatcher) Match(str string) map[utils.XY]bool {
-	matched := map[utils.XY]bool{}
+func (m *CoolMatcher) Match(str string) map[xy.XY]bool {
+	matched := map[xy.XY]bool{}
 	lines := strings.Split(str, "\n")
 	maxOffset := len(lines[0]) - m.maxX - 1
 
 	for i := range lines {
 		for o := 0; o <= maxOffset; o++ {
-			off := utils.XY{o, i}
+			off := xy.XY{o, i}
 			if !m.matchSpecific(off, lines) {
 				continue
 			}
@@ -62,10 +62,10 @@ func (m *CoolMatcher) Match(str string) map[utils.XY]bool {
 }
 
 func NewCoolMatcher(str string, rawMatcher string) *CoolMatcher {
-	matcher := []utils.XY{}
+	matcher := []xy.XY{}
 	maxMatcherX := 0
 	for i, v := range strings.Split(strings.TrimSpace(rawMatcher), "\n") {
-		ml := v[1:len(v) - 1]
+		ml := v[1 : len(v)-1]
 		maxX := len(ml) - 1
 		if maxX > maxMatcherX {
 			maxMatcherX = maxX
@@ -76,7 +76,7 @@ func NewCoolMatcher(str string, rawMatcher string) *CoolMatcher {
 				continue
 			}
 
-			matcher = append(matcher, utils.XY{j, i})
+			matcher = append(matcher, xy.XY{j, i})
 		}
 	}
 

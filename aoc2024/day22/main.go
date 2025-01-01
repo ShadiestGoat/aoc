@@ -1,11 +1,9 @@
 package day22
 
-import (
-	"github.com/shadiestgoat/aoc/utils"
-)
+import "github.com/shadiestgoat/aoc/utils/sparse"
 
 func parseInput(inp string) []int {
-	return utils.SplitAndParseInt(inp, "\n")
+	return sparse.SplitAndParseInt(inp, "\n")
 }
 
 func MixAndPrune(a, b int) int {
@@ -13,15 +11,16 @@ func MixAndPrune(a, b int) int {
 }
 
 func EvolveSecret(a int) int {
-	v := MixAndPrune(a, a * 64)
+	v := MixAndPrune(a, a*64)
 	v = MixAndPrune(v, v/32)
-	return MixAndPrune(v, v * 2048)
+	return MixAndPrune(v, v*2048)
 }
 
 type Ring [4]int
+
 func (r *Ring) Add(n int) {
 	for i := 0; i < 3; i++ {
-		r[i] = r[i + 1]
+		r[i] = r[i+1]
 	}
 	r[3] = n
 }
@@ -34,7 +33,7 @@ func Solve1(inp string) any {
 		for i := 0; i < 2000; i++ {
 			v = EvolveSecret(v)
 		}
-		
+
 		t += v
 	}
 

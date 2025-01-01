@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func parseInput(inp string, h func(vl, vr int)) {
@@ -14,7 +14,7 @@ func parseInput(inp string, h func(vl, vr int)) {
 	for _, s := range lines {
 		spl := strings.Split(s, "   ")
 
-		h(utils.ParseInt(spl[0]), utils.ParseInt(spl[1]))
+		h(sparse.ParseInt(spl[0]), sparse.ParseInt(spl[1]))
 	}
 }
 

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/shadiestgoat/aoc/aoc2024/day2"
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 const CASES = `
@@ -24,7 +24,7 @@ func TestIsSafeWithoutOne(t *testing.T) {
 		t.Run(l, func(t *testing.T) {
 			spl := strings.Split(l, ": ")
 
-			r := utils.SplitAndParseInt(spl[0], " ")
+			r := sparse.SplitAndParseInt(spl[0], " ")
 
 			e := spl[1] == "S"
 			safe := day2.IsSafeWithoutOne(r)

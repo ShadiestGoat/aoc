@@ -1,11 +1,9 @@
 package day11
 
-import (
-	"github.com/shadiestgoat/aoc/utils"
-)
+import "github.com/shadiestgoat/aoc/utils/sparse"
 
 func ParseInputArray(inp string) []int {
-	return utils.SplitAndParseInt(inp, " ")
+	return sparse.SplitAndParseInt(inp, " ")
 }
 
 func RunGameArray(l []int, moves int) int {

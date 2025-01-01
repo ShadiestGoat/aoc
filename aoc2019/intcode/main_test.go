@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/shadiestgoat/aoc/aoc2019/intcode"
-	"github.com/shadiestgoat/aoc/utils"
 	"github.com/shadiestgoat/aoc/utils/tutils"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 func TestRunIntCode(t *testing.T) {
@@ -31,7 +31,7 @@ func TestRunIntCode(t *testing.T) {
 			arr[i] = v
 		}
 
-		return strings.Join(utils.Map(arr, strconv.Itoa), ",")
+		return strings.Join(xarr.Map(arr, strconv.Itoa), ",")
 	})
 
 	var ioTestCases = [][3]any{
@@ -47,7 +47,7 @@ func TestRunIntCode(t *testing.T) {
 	}
 
 	for _, cfg := range ioTestCases {
-		t.Run(cfg[0].(string) + "-" + strconv.Itoa(cfg[1].(int)), func(t *testing.T) {
+		t.Run(cfg[0].(string)+"-"+strconv.Itoa(cfg[1].(int)), func(t *testing.T) {
 			comp := &intcode.Computer{
 				Input: []int{cfg[1].(int)},
 				Code:  intcode.ParseIntCode(cfg[0].(string)),

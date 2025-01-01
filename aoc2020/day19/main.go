@@ -4,12 +4,13 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 type Rule struct {
-	ID int
-	Val rune
+	ID         int
+	Val        rune
 	Definition [][]int
 }
 
@@ -63,14 +64,14 @@ func (r *RuleSet) resolve(id int, cur []string, target string) ([]string, bool) 
 		}
 
 		doResolve = true
-		utils.MapListKeysOnExisting(newCurs, v)
+		xarr.MapListKeysOnExisting(newCurs, v)
 	}
 
 	if !doResolve {
 		return nil, true
 	}
 
-	return utils.MapKeys(v), false
+	return xarr.MapKeys(v), false
 }
 
 func (r *RuleSet) IsGood(s string) bool {
@@ -98,7 +99,7 @@ func parseInput(inp string, override map[int]string) (*RuleSet, []string) {
 
 	for _, v := range strings.Split(spl[0], "\n") {
 		exprSpl := strings.Split(v, ": ")
-		id := utils.ParseInt(exprSpl[0])
+		id := sparse.ParseInt(exprSpl[0])
 
 		expr := exprSpl[1]
 		if override[id] != "" {
@@ -106,14 +107,14 @@ func parseInput(inp string, override map[int]string) (*RuleSet, []string) {
 		}
 
 		r := &Rule{
-			ID:    id,
-			Val:   0,
+			ID:         id,
+			Val:        0,
 			Definition: [][]int{},
 		}
 		if expr[0] == '"' {
 			r.Val = rune(expr[1])
 		} else {
-			r.Definition = utils.SplitAndParseInt2(expr, " | ", " ")
+			r.Definition = sparse.SplitAndParseInt2(expr, " | ", " ")
 		}
 
 		rs.Rules[id] = r
@@ -138,7 +139,7 @@ func Solve1(inp string) any {
 func Solve2(inp string) any {
 	// Fuck you, creator, it can handle any possibilities due to efficient prefix matching!!
 	rs, checks := parseInput(inp, map[int]string{
-		8: `42 | 42 8`,
+		8:  `42 | 42 8`,
 		11: `42 31 | 42 11 31`,
 	})
 	count := 0

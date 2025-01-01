@@ -3,7 +3,7 @@ package day3
 import (
 	"regexp"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 // Yeah yeah yeah whatever regex is simple & I'm tired and dont want to do non-regex solution
@@ -18,7 +18,7 @@ var (
 )
 
 func mult(n1, n2 string) int {
-	return utils.ParseInt(n1) * utils.ParseInt(n2)
+	return sparse.ParseInt(n1) * sparse.ParseInt(n2)
 }
 
 func Solve1(inp string) any {

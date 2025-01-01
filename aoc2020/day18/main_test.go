@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/shadiestgoat/aoc/aoc2020/day18"
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func doTest(t *testing.T, tests []string, h func(string) int) {
@@ -14,7 +14,7 @@ func doTest(t *testing.T, tests []string, h func(string) int) {
 
 		resp := h(cfg[0])
 
-		if resp != utils.ParseInt(cfg[1]) {
+		if resp != sparse.ParseInt(cfg[1]) {
 			t.Errorf("Failed to parse '%v': expected %v, got %v", cfg[0], cfg[1], resp)
 		}
 	}

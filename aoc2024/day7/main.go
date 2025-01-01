@@ -4,7 +4,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 type Op int
@@ -60,12 +60,12 @@ func (e *Equation) CanBePossible(ops []Op) bool {
 }
 
 func parseInput(inp string) []*Equation {
-	return utils.SplitAndParseFunc(inp, "\n", func(s string) *Equation {
+	return sparse.SplitAndParseFunc(inp, "\n", func(s string) *Equation {
 		spl := strings.Split(s, ": ")
 
 		return &Equation{
-			Res:  utils.ParseInt(spl[0]),
-			Vals: utils.SplitAndParseInt(spl[1], " "),
+			Res:  sparse.ParseInt(spl[0]),
+			Vals: sparse.SplitAndParseInt(spl[1], " "),
 		}
 	})
 }

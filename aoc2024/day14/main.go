@@ -5,15 +5,16 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 type Robot struct {
-	Pos utils.XY
-	Vel utils.XY
+	Pos xy.XY
+	Vel xy.XY
 }
 
-func (r Robot) AfterSeconds(s int, size utils.XY) utils.XY {
+func (r Robot) AfterSeconds(s int, size xy.XY) xy.XY {
 	c := r.Pos.Add(r.Vel.Mul(s))
 	c[0] %= size[0]
 	c[1] %= size[1]
@@ -29,7 +30,7 @@ func (r Robot) AfterSeconds(s int, size utils.XY) utils.XY {
 	return c
 }
 
-func (r Robot) FindNearestNeighbor(dir utils.XY) int {
+func (r Robot) FindNearestNeighbor(dir xy.XY) int {
 	for {
 
 	}
@@ -42,8 +43,8 @@ func parseInput(inp string) []*Robot {
 		spl := strings.Split(l, " ")
 
 		allRobots = append(allRobots, &Robot{
-			Pos: utils.XYFromArr(utils.SplitAndParseInt(spl[0][2:], ",")),
-			Vel:     utils.XYFromArr(utils.SplitAndParseInt(spl[1][2:], ",")),
+			Pos: xy.XYFromArr(sparse.SplitAndParseInt(spl[0][2:], ",")),
+			Vel: xy.XYFromArr(sparse.SplitAndParseInt(spl[1][2:], ",")),
 		})
 	}
 
@@ -52,15 +53,15 @@ func parseInput(inp string) []*Robot {
 
 func moveAllRobots(allRobots []*Robot, mx, my int) {
 	for _, r := range allRobots {
-		r.Pos = r.AfterSeconds(1, utils.XY{mx, my})
+		r.Pos = r.AfterSeconds(1, xy.XY{mx, my})
 	}
 }
 
 func GenericSolve1(inp string, seconds, mx, my int) any {
 	robots := parseInput(inp)
 
-	size := utils.XY{mx, my}
-	mid := utils.XY{mx/2, my/2}
+	size := xy.XY{mx, my}
+	mid := xy.XY{mx / 2, my / 2}
 	quadrants := [4]int{}
 
 	for _, r := range robots {
@@ -80,7 +81,7 @@ func GenericSolve1(inp string, seconds, mx, my int) any {
 			q += 2
 		}
 
-		quadrants[q - 1]++
+		quadrants[q-1]++
 	}
 
 	return quadrants[0] * quadrants[1] * quadrants[2] * quadrants[3]

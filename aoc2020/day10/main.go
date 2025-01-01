@@ -3,12 +3,12 @@ package day10
 import (
 	"slices"
 
-	"github.com/mxschmitt/golang-combinations"
-	"github.com/shadiestgoat/aoc/utils"
+	combinations "github.com/mxschmitt/golang-combinations"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func Solve1(inp string) any {
-	parsed := utils.SplitAndParseInt(inp, "\n")
+	parsed := sparse.SplitAndParseInt(inp, "\n")
 
 	slices.Sort(parsed)
 
@@ -69,7 +69,7 @@ func PossibilityCounter(min, max int, path []int) int {
 }
 
 func Solve2(inp string) any {
-	parsed := utils.SplitAndParseInt(inp, "\n")
+	parsed := sparse.SplitAndParseInt(inp, "\n")
 
 	slices.Sort(parsed)
 

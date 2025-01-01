@@ -5,33 +5,35 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/mutils"
+	"github.com/shadiestgoat/aoc/utils/xarr"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 func parseInput(inp string) *World {
-	d := utils.Map(strings.Split(inp, "\n"), func(s string) []rune {
+	d := xarr.Map(strings.Split(inp, "\n"), func(s string) []rune {
 		return []rune(s)
 	})
 
 	return &World{
 		Data: d,
-		Size: utils.GetSize(d),
+		Size: xy.GetSize(d),
 	}
 }
 
 type World struct {
 	Data [][]rune
-	Size utils.XY
+	Size xy.XY
 }
 
-func (w World) countFrom(og utils.XY) (int, []utils.XY) {
+func (w World) countFrom(og xy.XY) (int, []xy.XY) {
 	seen := 0
-	testedSlopes := map[utils.XY]bool{}
+	testedSlopes := map[xy.XY]bool{}
 
-	testOffset := func (x, y int) {
-		d := utils.GCD(x, y)
+	testOffset := func(x, y int) {
+		d := mutils.GCD(x, y)
 
-		off := utils.XY{x/d, y/d}
+		off := xy.XY{x / d, y / d}
 		if testedSlopes[off] {
 			return
 		}
@@ -63,18 +65,18 @@ func (w World) countFrom(og utils.XY) (int, []utils.XY) {
 		}
 	}
 
-	return seen, utils.MapKeys(testedSlopes)
+	return seen, xarr.MapKeys(testedSlopes)
 }
 
-func (w World) bestPlace() (int, utils.XY, []utils.XY) {
+func (w World) bestPlace() (int, xy.XY, []xy.XY) {
 	max := 0
-	bestCoord := utils.XY{}
-	bestSlopes := []utils.XY{}
+	bestCoord := xy.XY{}
+	bestSlopes := []xy.XY{}
 
 	for y, row := range w.Data {
 		for x, r := range row {
 			if r == '#' {
-				coord := utils.XY{x, y}
+				coord := xy.XY{x, y}
 				if c, slopes := w.countFrom(coord); c > max {
 					max = c
 					bestCoord = coord
@@ -87,13 +89,13 @@ func (w World) bestPlace() (int, utils.XY, []utils.XY) {
 	return max, bestCoord, bestSlopes
 }
 
-func (w World) findClosestInDir(c, dir utils.XY) (utils.XY, bool) {
+func (w World) findClosestInDir(c, dir xy.XY) (xy.XY, bool) {
 	m := 1
 
 	for {
 		nc := c.Add(dir.Mul(m))
 		if nc.OutOfBounds(w.Size) {
-			return utils.XY{}, false
+			return xy.XY{}, false
 		}
 
 		if w.Data[nc[1]][nc[0]] == '#' {
@@ -116,7 +118,7 @@ func Solve2(inp string) any {
 	w := parseInput(inp)
 
 	_, coord, offsets := w.bestPlace()
-	slices.SortStableFunc(offsets, func(a, b utils.XY) int {
+	slices.SortStableFunc(offsets, func(a, b xy.XY) int {
 		qa, qb := a.Quadrant(), b.Quadrant()
 		if qa < qb {
 			return -1
@@ -142,7 +144,7 @@ func Solve2(inp string) any {
 			destroyed++
 			w.Data[nc[1]][nc[0]] = '.'
 			if destroyed == 199 {
-				return nc[0] * 100 + nc[1]
+				return nc[0]*100 + nc[1]
 			}
 		}
 

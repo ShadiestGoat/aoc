@@ -3,11 +3,12 @@ package day3
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 var (
-	DIR_TRANSLATION = map[rune]utils.XY{
+	DIR_TRANSLATION = map[rune]xy.XY{
 		'R': {1, 0},
 		'L': {-1, 0},
 		'U': {0, -1},
@@ -17,7 +18,7 @@ var (
 
 type Instruction struct {
 	Amount int
-	Dir utils.XY
+	Dir    xy.XY
 }
 
 func parseInput(inp string) [2][]*Instruction {
@@ -28,7 +29,7 @@ func parseInput(inp string) [2][]*Instruction {
 		for _, ins := range strings.Split(l, ",") {
 			dir := DIR_TRANSLATION[rune(ins[0])]
 			o[i] = append(o[i], &Instruction{
-				Amount: utils.ParseInt(ins[1:]),
+				Amount: sparse.ParseInt(ins[1:]),
 				Dir:    dir,
 			})
 		}
@@ -37,7 +38,7 @@ func parseInput(inp string) [2][]*Instruction {
 	return o
 }
 
-func (ins *Instruction) DoSteps(cur utils.XY, h func (pos utils.XY)) utils.XY {
+func (ins *Instruction) DoSteps(cur xy.XY, h func(pos xy.XY)) xy.XY {
 	for i := 1; i <= ins.Amount; i++ {
 		cur = cur.Add(ins.Dir)
 		h(cur)
@@ -46,8 +47,8 @@ func (ins *Instruction) DoSteps(cur utils.XY, h func (pos utils.XY)) utils.XY {
 	return cur
 }
 
-func doInsSet(ins []*Instruction, h func (pos utils.XY)) {
-	curPos := utils.XY{}
+func doInsSet(ins []*Instruction, h func(pos xy.XY)) {
+	curPos := xy.XY{}
 
 	for _, v := range ins {
 		curPos = v.DoSteps(curPos, h)
@@ -56,17 +57,17 @@ func doInsSet(ins []*Instruction, h func (pos utils.XY)) {
 
 func Solve1(inp string) any {
 	ins := parseInput(inp)
-	wireAPath := map[utils.XY]bool{}
+	wireAPath := map[xy.XY]bool{}
 
-	doInsSet(ins[0], func(pos utils.XY) {
+	doInsSet(ins[0], func(pos xy.XY) {
 		wireAPath[pos] = true
 	})
 
-	delete(wireAPath, utils.XY{})
+	delete(wireAPath, xy.XY{})
 
-	intersection := utils.XY{}
+	intersection := xy.XY{}
 
-	doInsSet(ins[1], func(pos utils.XY) {
+	doInsSet(ins[1], func(pos xy.XY) {
 		if !wireAPath[pos] {
 			return
 		}
@@ -81,10 +82,10 @@ func Solve1(inp string) any {
 
 func Solve2(inp string) any {
 	ins := parseInput(inp)
-	wireAPath := map[utils.XY]int{}
+	wireAPath := map[xy.XY]int{}
 	steps := 0
 
-	doInsSet(ins[0], func(pos utils.XY) {
+	doInsSet(ins[0], func(pos xy.XY) {
 		steps++
 
 		if wireAPath[pos] == 0 {
@@ -94,7 +95,7 @@ func Solve2(inp string) any {
 
 	steps = 0
 	bestStepCount := 0
-	doInsSet(ins[1], func(pos utils.XY) {
+	doInsSet(ins[1], func(pos xy.XY) {
 		steps++
 
 		if wireAPath[pos] == 0 {

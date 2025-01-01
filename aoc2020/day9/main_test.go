@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/shadiestgoat/aoc/aoc2020/day9"
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 const INPUT = `
@@ -40,7 +40,7 @@ func TestGenericSolver1(t *testing.T) {
 }
 
 func TestGenericSolver2(t *testing.T) {
-	min, max := day9.GenericSolver2(utils.SplitAndParseInt(strings.TrimSpace(INPUT), "\n"), 127)
+	min, max := day9.GenericSolver2(sparse.SplitAndParseInt(strings.TrimSpace(INPUT), "\n"), 127)
 
 	if min != 2 || max != 5 {
 		t.Fatalf("Grr >:( expected (2, 5), got %v", [2]int{min, max})

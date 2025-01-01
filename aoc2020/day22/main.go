@@ -3,13 +3,14 @@ package day22
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 type Game struct {
 	Players [2][]int
 	History [][2][]int
-	Layer int
+	Layer   int
 }
 
 func (g *Game) winnerDeck(w, l int) {
@@ -82,12 +83,12 @@ func (g *Game) SubGame() *Game {
 	for p, d := range decks {
 		amt := d[0]
 
-		newDecks[p] = d[1:amt + 1]
+		newDecks[p] = d[1 : amt+1]
 	}
 
 	return &Game{
 		Players: newDecks,
-		Layer: g.Layer + 1,
+		Layer:   g.Layer + 1,
 	}
 }
 
@@ -133,7 +134,7 @@ func (g *Game) Combat() int {
 }
 
 // Runs game until a winner emerges
-func Forever(gameFunc func () int) int {
+func Forever(gameFunc func() int) int {
 	res := gameFunc()
 	for res == 0 {
 		res = gameFunc()
@@ -143,7 +144,7 @@ func Forever(gameFunc func () int) int {
 }
 
 func WinningScore(g *Game, winner int) int {
-	winningDeck := g.Players[winner - 1]
+	winningDeck := g.Players[winner-1]
 
 	sum := 0
 	for i, w := range winningDeck {
@@ -158,7 +159,7 @@ func parseInput(inp string) *Game {
 	players := [2][]int{}
 
 	for i, p := range spl {
-		players[i] = utils.Map(strings.Split(p, "\n")[1:], utils.ParseInt)
+		players[i] = xarr.Map(strings.Split(p, "\n")[1:], sparse.ParseInt)
 	}
 
 	return &Game{

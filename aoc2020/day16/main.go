@@ -3,7 +3,7 @@ package day16
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 type Rule struct {
@@ -46,8 +46,8 @@ func parseInput(inp string) ([]*Rule, []int, [][]int) {
 			c := strings.Split(ra, "-")
 
 			r.Rules = append(r.Rules, &Constraint{
-				Min: utils.ParseInt(c[0]),
-				Max: utils.ParseInt(c[1]),
+				Min: sparse.ParseInt(c[0]),
+				Max: sparse.ParseInt(c[1]),
 			})
 		}
 
@@ -55,13 +55,13 @@ func parseInput(inp string) ([]*Rule, []int, [][]int) {
 	}
 
 	spl := strings.Split(parts[1], "\n")
-	myTicket := utils.SplitAndParseInt(spl[1], ",")
+	myTicket := sparse.SplitAndParseInt(spl[1], ",")
 
 	spl = strings.Split(parts[2], "\n")
 	nearby := make([][]int, len(spl)-1)
 
 	for i, v := range spl[1:] {
-		nearby[i] = utils.SplitAndParseInt(v, ",")
+		nearby[i] = sparse.SplitAndParseInt(v, ",")
 	}
 
 	return rules, myTicket, nearby
@@ -169,18 +169,18 @@ func Solve2(inp string) any {
 
 	lastLen := len(determinedRules)
 	for len(determinedRules) != len(rules) {
-		for fi, cand := range candidates {
-			for r := range cand {
+		for fi, c := range candidates {
+			for r := range c {
 				if _, ok := determinedRules[r]; ok {
-					delete(cand, r)
+					delete(c, r)
 				}
 			}
 
-			if len(cand) == 1 {
+			if len(c) == 1 {
 				r := 0
 
 				// Ssshh jank code is fun
-				for _r := range cand {
+				for _r := range c {
 					r = _r
 					break
 				}

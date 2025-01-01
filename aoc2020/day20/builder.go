@@ -4,7 +4,7 @@ import (
 	"math"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xprint"
 )
 
 func (t *Tile) getBorder(pos int) string {
@@ -142,7 +142,7 @@ func (b *BuildState) build() (string, bool) {
 		info, ok := b.Borders[lastBorder]
 
 		if !ok {
-			utils.PrintJSON(lastBorder, lastTile, b.Borders)
+			xprint.PrintJSON(lastBorder, lastTile, b.Borders)
 			panic("Unknown border")
 		}
 

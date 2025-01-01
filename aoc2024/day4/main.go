@@ -3,7 +3,7 @@ package day4
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 const (
@@ -23,11 +23,11 @@ var (
 		{-1, -1},
 	}
 
-	ALL_PART_2_CHECKS = [4]map[utils.XY]rune{}
+	ALL_PART_2_CHECKS = [4]map[xy.XY]rune{}
 )
 
 func init() {
-	ALL_PART_2_CHECKS[0] = map[utils.XY]rune{
+	ALL_PART_2_CHECKS[0] = map[xy.XY]rune{
 		{-1, -1}: 'M',
 		{1, -1}:  'M',
 		{-1, 1}:  'S',
@@ -36,15 +36,15 @@ func init() {
 
 	// Mess? What mess?
 	for i := 1; i < 4; i++ {
-		curCheck := map[utils.XY]rune{}
+		curCheck := map[xy.XY]rune{}
 
 		for dir, c := range ALL_PART_2_CHECKS[i-1] {
-			var newDir utils.XY
+			var newDir xy.XY
 
 			if dir[0] == dir[1] {
-				newDir = utils.XY{dir[0] * -1, dir[1]}
+				newDir = xy.XY{dir[0] * -1, dir[1]}
 			} else {
-				newDir = utils.XY{dir[0], dir[0]}
+				newDir = xy.XY{dir[0], dir[0]}
 			}
 
 			curCheck[newDir] = c
@@ -60,7 +60,7 @@ func parseInput(inp string) Board {
 	return strings.Split(inp, "\n")
 }
 
-func (b Board) checkCoord(xy utils.XY, t rune) bool {
+func (b Board) checkCoord(xy xy.XY, t rune) bool {
 	if xy[0] < 0 || xy[1] < 0 || xy[1] >= len(b) || xy[0] >= len(b[xy[1]]) {
 		return false
 	}
@@ -68,7 +68,7 @@ func (b Board) checkCoord(xy utils.XY, t rune) bool {
 	return rune(b[xy[1]][xy[0]]) == t
 }
 
-func (b Board) searchDir(xy utils.XY, dir utils.XY, targetWord string) bool {
+func (b Board) searchDir(xy xy.XY, dir xy.XY, targetWord string) bool {
 	// 0 is already confirmed
 	targetI := 1
 
@@ -85,7 +85,7 @@ func (b Board) searchDir(xy utils.XY, dir utils.XY, targetWord string) bool {
 	}
 }
 
-func (b Board) dirChecks(xy utils.XY, checks map[utils.XY]rune) bool {
+func (b Board) dirChecks(xy xy.XY, checks map[xy.XY]rune) bool {
 	for dir, t := range checks {
 		if !b.checkCoord(xy.Add(dir), t) {
 			return false
@@ -129,7 +129,7 @@ func Solve2(inp string) any {
 			}
 
 			for _, check := range ALL_PART_2_CHECKS {
-				if b.dirChecks(utils.XY{j, i}, check) {
+				if b.dirChecks(xy.XY{j, i}, check) {
 					tot++
 					break
 				}

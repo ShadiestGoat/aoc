@@ -4,19 +4,19 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 type State struct {
 	// Coord -> Directions
-	DirHist map[utils.XY][]utils.XY
-	CurPos  utils.XY
-	Dir     utils.XY
+	DirHist map[xy.XY][]xy.XY
+	CurPos  xy.XY
+	Dir     xy.XY
 	Board   []string
 }
 
-func (s State) outOfBounds(c utils.XY) bool {
-	return c.OutOfBounds(utils.XY{len(s.Board[0]), len(s.Board)})
+func (s State) outOfBounds(c xy.XY) bool {
+	return c.OutOfBounds(xy.XY{len(s.Board[0]), len(s.Board)})
 }
 
 // Does 1 action. Either moves or rotates
@@ -46,7 +46,7 @@ func (s *State) GoUntilExit() {
 	}
 }
 
-func (s *State) findObstacleInDirection(og utils.XY, dir utils.XY) bool {
+func (s *State) findObstacleInDirection(og xy.XY, dir xy.XY) bool {
 	i := 1
 	for {
 		pos := og.Add(dir.Mul(i))
@@ -69,16 +69,16 @@ func parseInput(inp string) *State {
 	lines := strings.Split(strings.Replace(inp, "^", ".", 1), "\n")
 	perLineChars := len(lines[0]) + 1
 
-	pos := utils.XY{rawPos % perLineChars, rawPos / perLineChars}
+	pos := xy.XY{rawPos % perLineChars, rawPos / perLineChars}
 
 	return &State{
-		DirHist: map[utils.XY][]utils.XY{
+		DirHist: map[xy.XY][]xy.XY{
 			pos: {
 				{0, -1},
 			},
 		},
 		CurPos: pos,
-		Dir:    utils.XY{0, -1},
+		Dir:    xy.XY{0, -1},
 		Board:  lines,
 	}
 }
@@ -101,8 +101,8 @@ func Solve2(inp string) any {
 
 	oldHist := s.DirHist
 	delete(oldHist, ogPos)
-	testHist := map[utils.XY]bool{}
-	dirs := []utils.XY{
+	testHist := map[xy.XY]bool{}
+	dirs := []xy.XY{
 		{0, -1},
 		{0, 1},
 		{-1, 0},
@@ -122,13 +122,13 @@ func Solve2(inp string) any {
 
 	for c := range testHist {
 		// Reset to og
-		s.DirHist = map[utils.XY][]utils.XY{
+		s.DirHist = map[xy.XY][]xy.XY{
 			ogPos: {
 				{0, -1},
 			},
 		}
 
-		s.Dir = utils.XY{0, -1}
+		s.Dir = xy.XY{0, -1}
 		s.CurPos = ogPos
 		s.Board = make([]string, len(s.Board))
 		copy(s.Board, ogBoard)

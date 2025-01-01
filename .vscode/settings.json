@@ -1,9 +1,15 @@
 {
     "cSpell.words": [
+        "bitshifts",
+        "funiter",
         "intcode",
         "MULT",
+        "mutils",
         "nums",
         "segs",
-        "tutils"
+        "subtest",
+        "tutils",
+        "xarr",
+        "xprint"
     ],
 }

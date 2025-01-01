@@ -1,12 +1,11 @@
 package day7_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/shadiestgoat/aoc/aoc2020/day7"
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xprint"
 )
 
 const INPUT = `
@@ -41,7 +40,7 @@ dark violet bags contain no other bags.
 
 func TestSolve2(t *testing.T) {
 	inp := day7.ParseInput(strings.TrimSpace(INPUT_2))
-	fmt.Println(utils.JSONAnswer{inp})
+	xprint.PrintJSON(inp)
 
 	d := day7.Solve2(strings.TrimSpace(INPUT_2))
 

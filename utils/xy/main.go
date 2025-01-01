@@ -1,58 +1,13 @@
-package utils
+package xy
 
 import (
 	"math"
 	"strconv"
+
+	"github.com/shadiestgoat/aoc/utils/mutils"
 )
 
 type XY [2]int
-
-var (
-	DIR_UP    = XY{0, -1}
-	DIR_DOWN  = XY{0, 1}
-	DIR_LEFT  = XY{-1, 0}
-	DIR_RIGHT = XY{1, 0}
-
-	DIR_DIAG_NE = XY{1, -1}
-	DIR_DIAG_SE = XY{1, 1}
-	DIR_DIAG_SW = XY{-1, 1}
-	DIR_DIAG_NW = XY{-1, -1}
-
-	ALL_DIRECT_DIRS = []XY{
-		DIR_UP,
-		DIR_RIGHT,
-		DIR_DOWN,
-		DIR_LEFT,
-	}
-	ALL_DIAGONALS = []XY{
-		DIR_DIAG_NE,
-		DIR_DIAG_SE,
-		DIR_DIAG_SW,
-		DIR_DIAG_NW,
-	}
-	ALL_DIRS = []XY{
-		DIR_UP,
-		DIR_DIAG_NE,
-		DIR_RIGHT,
-		DIR_DIAG_SE,
-		DIR_DOWN,
-		DIR_DIAG_SW,
-		DIR_LEFT,
-		DIR_DIAG_NW,
-	}
-)
-
-func getSize[T []E | string, E any](m []T) XY {
-	return XY{len(m[0]), len(m)}
-}
-
-func GetSizeString(m []string) XY {
-	return getSize[string, any](m)
-}
-
-func GetSize[T any](v [][]T) XY {
-	return getSize[[]T, T](v)
-}
 
 func (c XY) Add(c2 XY) XY {
 	return [2]int{c[0] + c2[0], c[1] + c2[1]}
@@ -66,22 +21,8 @@ func (c XY) Mul(v int) XY {
 	return [2]int{c[0] * v, c[1] * v}
 }
 
-func (c XY) Copy() XY {
-	return XY{c[0], c[1]}
-}
-
-func unit(v int) int {
-	if v == 0 {
-		return 0
-	} else if v < 0 {
-		return -1
-	}
-
-	return 1
-}
-
 func (c XY) Unit() XY {
-	return XY{unit(c[0]), unit(c[1])}
+	return XY{mutils.Dir(c[0]), mutils.Dir(c[1])}
 }
 
 // Checks if c is outside of a box size {size}. This assumes the box is 0, 0 -> point {size}.
@@ -146,10 +87,6 @@ func (c XY) Quadrant() int {
 
 func (c XY) String() string {
 	return strconv.Itoa(c[0]) + "," + strconv.Itoa(c[1])
-}
-
-func XYFromArr(arr []int) XY {
-	return XY{arr[0], arr[1]}
 }
 
 func MinMaxOfCoords(coords []XY) (XY, XY) {

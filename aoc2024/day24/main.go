@@ -3,18 +3,18 @@ package day24
 import (
 	"fmt"
 	"maps"
-	// "maps"
+
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 type GateOp string
 
 const (
 	OP_AND GateOp = "AND"
-	OP_OR GateOp = "OR"
+	OP_OR  GateOp = "OR"
 	OP_XOR GateOp = "XOR"
 )
 
@@ -32,16 +32,16 @@ func (g GateOp) Do(a, b bool) bool {
 }
 
 type Gate struct {
-	Op GateOp
+	Op   GateOp
 	Nums []string
 	Res  string
 }
 
 type State struct {
-	Nums map[string]bool
-	Gates []*Gate
+	Nums      map[string]bool
+	Gates     []*Gate
 	OutToGate map[string]*Gate
-	swaps []string
+	swaps     []string
 }
 
 func (s State) getNum(prefix rune) int {
@@ -51,7 +51,7 @@ func (s State) getNum(prefix rune) int {
 			continue
 		}
 
-		p := utils.ParseInt(k[1:])
+		p := sparse.ParseInt(k[1:])
 		o |= 1 << p
 	}
 
@@ -116,8 +116,8 @@ func parseInput(inp string) *State {
 	spl := strings.Split(inp, "\n\n")
 
 	s := &State{
-		Nums:  map[string]bool{},
-		Gates: []*Gate{},
+		Nums:      map[string]bool{},
+		Gates:     []*Gate{},
 		OutToGate: map[string]*Gate{},
 	}
 
@@ -165,14 +165,14 @@ func (s *State) swapOut(a, b string) {
 
 func (s *State) fixI(i int) bool {
 	curOut := s.OutToGate[fmtN('z', i)]
-	
-	lastNums := s.OutToGate[fmtN('z', i - 1)].Nums
+
+	lastNums := s.OutToGate[fmtN('z', i-1)].Nums
 
 	// Must feed into real out
 	xyXor := s.find(OP_XOR, fmtN('x', i), fmtN('y', i))
 
 	carry := s.find(OP_AND, lastNums[0], lastNums[1])
-	xy1And := s.find(OP_AND, fmtN('x', i - 1), fmtN('y', i - 1))
+	xy1And := s.find(OP_AND, fmtN('x', i-1), fmtN('y', i-1))
 	lastOr := s.find(OP_OR, carry.Res, xy1And.Res)
 	realOut := s.find(OP_XOR, lastOr.Res, xyXor.Res)
 
@@ -206,7 +206,6 @@ func (s *State) fixI(i int) bool {
 		s.swapOut(fmtN('z', i), realOut.Res)
 	}
 
-	
 	return true
 }
 
@@ -223,20 +222,20 @@ func Solve2(inp string) any {
 
 	for {
 		s.DoAll()
-		res, z := s.getNum('x') + s.getNum('y'), s.getNum('z')
+		res, z := s.getNum('x')+s.getNum('y'), s.getNum('z')
 		if res == z {
 			break
 		}
 		s.Nums = maps.Clone(baseNums)
 
 		fixed := false
-		for i := 0; i < zCount; i++ {			
-			if i > 3 && i != zCount - 1 && s.fixI(i) {
+		for i := 0; i < zCount; i++ {
+			if i > 3 && i != zCount-1 && s.fixI(i) {
 				fixed = true
 				break
 			}
 		}
-		
+
 		if !fixed {
 			fmt.Println(s.swaps)
 			panic("No fixes...")

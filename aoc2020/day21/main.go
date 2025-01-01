@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 func parseInput(inp string) (map[string]map[string]bool, map[string]int) {
@@ -16,7 +16,7 @@ func parseInput(inp string) (map[string]map[string]bool, map[string]int) {
 		spl := strings.Split(l[:len(l)-1], " (contains ")
 		allergens := strings.Split(spl[1], ", ")
 		ingredients := strings.Split(spl[0], " ")
-		ingMap := utils.MapListKeys(ingredients)
+		ingMap := xarr.MapListKeys(ingredients)
 
 		for _, v := range ingredients {
 			allIngredients[v]++
@@ -75,7 +75,7 @@ func Solve2(inp string) any {
 				for v := range ing {
 					curIng = v
 				}
-	
+
 				resolvedIngredients[curIng] = true
 				resolvedAllergens[a] = curIng
 				delete(allergens, a)
@@ -90,7 +90,7 @@ func Solve2(inp string) any {
 	}
 
 	evilIng := []string{}
-	sortedAllergens := utils.MapKeys(resolvedAllergens)
+	sortedAllergens := xarr.MapKeys(resolvedAllergens)
 	slices.Sort(sortedAllergens)
 
 	for _, a := range sortedAllergens {

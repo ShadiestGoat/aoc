@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 const (
@@ -16,14 +16,14 @@ const (
 )
 
 type Tile struct {
-	ID int
+	ID   int
 	Data []string
 }
 
 type BorderInfo struct {
 	TileID int
 	// 0 - top, 3 - left
-	BorderPos int
+	BorderPos     int
 	BorderFlipped bool
 }
 
@@ -31,9 +31,9 @@ func parseInput(inp string) (map[string][]*BorderInfo, map[int]*Tile) {
 	idToTile := map[int]*Tile{}
 	borders := map[string][]*BorderInfo{}
 
-	addBorder := func (id, pos int, border string) {
+	addBorder := func(id, pos int, border string) {
 		borders[border] = append(borders[border], &BorderInfo{
-			TileID:       id,
+			TileID:        id,
 			BorderPos:     pos,
 			BorderFlipped: false,
 		})
@@ -42,7 +42,7 @@ func parseInput(inp string) (map[string][]*BorderInfo, map[int]*Tile) {
 		slices.Reverse(rb)
 
 		borders[string(rb)] = append(borders[string(rb)], &BorderInfo{
-			TileID:       id,
+			TileID:        id,
 			BorderPos:     pos,
 			BorderFlipped: true,
 		})
@@ -51,17 +51,17 @@ func parseInput(inp string) (map[string][]*BorderInfo, map[int]*Tile) {
 	for _, raw := range strings.Split(inp, "\n\n") {
 		spl := strings.SplitN(raw, "\n", 2)
 
-		id := utils.ParseInt(spl[0][5:len(spl[0]) - 1])
+		id := sparse.ParseInt(spl[0][5 : len(spl[0])-1])
 		data := strings.Split(spl[1], "\n")
 
 		addBorder(id, 0, data[0])
-		addBorder(id, 2, data[len(data) - 1])
+		addBorder(id, 2, data[len(data)-1])
 
 		lb, rb := make([]rune, len(data)), make([]rune, len(data))
 		for i, r := range data {
 			lb[i] = rune(r[0])
-			rb[i] = rune(r[len(r) - 1])
-		} 
+			rb[i] = rune(r[len(r)-1])
+		}
 
 		addBorder(id, 3, string(lb))
 		addBorder(id, 1, string(rb))

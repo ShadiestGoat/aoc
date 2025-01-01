@@ -3,18 +3,18 @@ package day8
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 type State struct {
 	Map []string
 	// Frequency -> list of coords for of the antennas
-	FrequencyCoords map[rune][]utils.XY
+	FrequencyCoords map[rune][]xy.XY
 }
 
 func (s *State) getAntis(maxPerNodeDirection int, exactMatch bool) int {
-	antis := map[utils.XY]bool{}
-	bounds := utils.XY{len(s.Map[0]), len(s.Map)}
+	antis := map[xy.XY]bool{}
+	bounds := xy.XY{len(s.Map[0]), len(s.Map)}
 	min := 1
 	if exactMatch {
 		min = 0
@@ -22,14 +22,14 @@ func (s *State) getAntis(maxPerNodeDirection int, exactMatch bool) int {
 
 	for _, allCoords := range s.FrequencyCoords {
 		for i, c1 := range allCoords {
-			for _, c2 := range allCoords[i + 1:] {
+			for _, c2 := range allCoords[i+1:] {
 				diff := c2.Add(c1.Mul(-1))
 
 				for i := min; i <= maxPerNodeDirection; i++ {
 					foundAnti := false
 					ac1 := c1.Add(diff.Mul(-i))
 					ac2 := c2.Add(diff.Mul(i))
-	
+
 					if !ac1.OutOfBounds(bounds) {
 						foundAnti = true
 						antis[ac1] = true
@@ -54,7 +54,7 @@ func parseInput(inp string) *State {
 	lines := strings.Split(inp, "\n")
 	s := &State{
 		Map:             lines,
-		FrequencyCoords: map[rune][]utils.XY{},
+		FrequencyCoords: map[rune][]xy.XY{},
 	}
 
 	for y, l := range lines {
@@ -62,7 +62,7 @@ func parseInput(inp string) *State {
 			if r == '.' {
 				continue
 			}
-			s.FrequencyCoords[r] = append(s.FrequencyCoords[r], utils.XY{x, y})
+			s.FrequencyCoords[r] = append(s.FrequencyCoords[r], xy.XY{x, y})
 		}
 	}
 
@@ -78,5 +78,5 @@ func Solve1(inp string) any {
 func Solve2(inp string) any {
 	s := parseInput(inp)
 
-	return s.getAntis(len(s.Map[0]) * 3, true)
+	return s.getAntis(len(s.Map[0])*3, true)
 }

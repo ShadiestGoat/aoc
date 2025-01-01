@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 func parseInput(inp string) (*LinkedList, *Node) {
@@ -56,7 +56,7 @@ func RunGame(ll *LinkedList, cur *Node, min, max int, moves int) {
 	l := time.Now()
 
 	for m := 0; m < moves; m++ {
-		if m % 100_000 == 0 && m != 0 {
+		if m%100_000 == 0 && m != 0 {
 			fmt.Println("On Move", m, time.Since(l))
 			l = time.Now()
 		}
@@ -111,7 +111,7 @@ func printState(cur *Node, pickedUp []int, dst int) {
 	}
 
 	fmt.Println("cups:", strings.Join(str, " "))
-	fmt.Println("pick up:", strings.Join(utils.Map(pickedUp, strconv.Itoa), ", "))
+	fmt.Println("pick up:", strings.Join(xarr.Map(pickedUp, strconv.Itoa), ", "))
 	fmt.Println("destination:", dst)
 	fmt.Println()
 }

@@ -3,11 +3,11 @@ package day10
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 var (
-	ALL_DIRS = []utils.XY{
+	ALL_DIRS = []xy.XY{
 		{0, -1},
 		{1, 0},
 		{0, 1},
@@ -17,22 +17,22 @@ var (
 
 type State struct {
 	Lines []string
-	size  utils.XY
+	size  xy.XY
 }
 
 func parseInput(inp string) *State {
 	lines := strings.Split(inp, "\n")
 	return &State{
 		Lines: lines,
-		size:  utils.GetSizeString(lines),
+		size:  xy.GetSizeString(lines),
 	}
 }
 
-func (s *State) valAt(c utils.XY) rune {
+func (s *State) valAt(c xy.XY) rune {
 	return rune(s.Lines[c[1]][c[0]])
 }
 
-func (s *State) CountPaths(cur utils.XY, counted map[utils.XY]bool) int {
+func (s *State) CountPaths(cur xy.XY, counted map[xy.XY]bool) int {
 	curV := s.valAt(cur)
 	if curV == '9' {
 		if counted != nil {
@@ -70,12 +70,12 @@ func (s *State) CountAllPaths(rating bool) int {
 	for y, l := range s.Lines {
 		for x, r := range l {
 			if r == '0' {
-				m := map[utils.XY]bool{}
+				m := map[xy.XY]bool{}
 				if rating {
 					m = nil
 				}
 
-				tot += s.CountPaths(utils.XY{x, y}, m)
+				tot += s.CountPaths(xy.XY{x, y}, m)
 			}
 		}
 	}

@@ -3,13 +3,13 @@ package day11
 import (
 	"container/list"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func ParseInputList(inp string) *list.List {
 	l := list.New()
 
-	for _, v := range utils.SplitAndParseInt(inp, " ") {
+	for _, v := range sparse.SplitAndParseInt(inp, " ") {
 		l.PushFront(v)
 	}
 

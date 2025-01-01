@@ -5,39 +5,41 @@ import (
 	"strings"
 
 	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
+
 	// In case you're wandering, no I'm not happy about using this lib. But also, I cannot be fucked to implement this rn
 	"github.com/RyanCarrier/dijkstra/v2"
 )
 
-func makeGraph(m []string, startPos, startDir, endPos utils.XY) *xRoadState {
+func makeGraph(m []string, startPos, startDir, endPos xy.XY) *xRoadState {
 	// We will use a 4 vertex system for connections - 1 for each allowed dir, but none that are connected directly
-/*  
-    C
-    |
-    ^
-A--< >---B
-    v
-    |
-	D
+	/*
+	       C
+	       |
+	       ^
+	   A--< >---B
+	       v
+	       |
+	   	D
 
-(+ A<->B, C<->D)
+	   (+ A<->B, C<->D)
 
-Where they can all go to each other, but not via some intermediate point. So A -> M -> D is impossible, only A->D.
-*/
-	size := utils.GetSizeString(m)
-	crossRoads := []utils.XY{startPos, endPos}
+	   Where they can all go to each other, but not via some intermediate point. So A -> M -> D is impossible, only A->D.
+	*/
+	size := xy.GetSizeString(m)
+	crossRoads := []xy.XY{startPos, endPos}
 
 	for y := 0; y < len(m); y++ {
 		for x := 0; x < len(m[0]); x++ {
-			bc := utils.XY{x, y}
+			bc := xy.XY{x, y}
 			if m[bc[1]][bc[0]] == '#' {
 				continue
 			}
 
-			// coordIndex[bc] = map[utils.XY]int{}
+			// coordIndex[bc] = map[xy.XY]int{}
 			founds := [4]bool{}
 
-			for i, d := range utils.ALL_DIRECT_DIRS {
+			for i, d := range xy.ALL_DIRECT_DIRS {
 				c := bc.Add(d)
 				if c.OutOfBounds(size) || m[c[1]][c[0]] == '#' {
 					continue
@@ -59,18 +61,17 @@ Where they can all go to each other, but not via some intermediate point. So A -
 		}
 	}
 
-
 	s := &xRoadState{
 		g:        &dijkstra.Graph{},
-		ref:      map[utils.XY]map[utils.XY]int{},
-		revRef:   map[int][2]utils.XY{},
+		ref:      map[xy.XY]map[xy.XY]int{},
+		revRef:   map[int][2]xy.XY{},
 		allRoads: crossRoads,
 		m:        m,
 		size:     size,
 	}
 
 	for _, c := range crossRoads {
-		for _, d := range utils.ALL_DIRECT_DIRS {
+		for _, d := range xy.ALL_DIRECT_DIRS {
 			s.parse(c, d)
 		}
 	}
@@ -78,7 +79,7 @@ Where they can all go to each other, but not via some intermediate point. So A -
 	s.getIndex(startPos, startDir)
 
 	for _, dirs := range s.ref {
-		for _, d := range utils.ALL_DIRECT_DIRS {
+		for _, d := range xy.ALL_DIRECT_DIRS {
 			v, ok := dirs[d]
 			if !ok {
 				continue
@@ -87,7 +88,6 @@ Where they can all go to each other, but not via some intermediate point. So A -
 			if v2, ok2 := dirs[d.RotateUnitVector(4)]; ok2 {
 				s.g.AddArc(v, v2, 1)
 			}
-
 
 			if v2, ok2 := dirs[d.RotateUnitVector(2)]; ok2 {
 				s.g.AddArc(v, v2, 1001)
@@ -103,32 +103,32 @@ Where they can all go to each other, but not via some intermediate point. So A -
 }
 
 type xRoadState struct {
-	g *dijkstra.Graph
-	ref map[utils.XY]map[utils.XY]int
-	revRef map[int][2]utils.XY
-	allRoads []utils.XY
-	m []string
-	size utils.XY
+	g        *dijkstra.Graph
+	ref      map[xy.XY]map[xy.XY]int
+	revRef   map[int][2]xy.XY
+	allRoads []xy.XY
+	m        []string
+	size     xy.XY
 }
 
-func (s *xRoadState) getIndex(c utils.XY, dir utils.XY) int {
+func (s *xRoadState) getIndex(c xy.XY, dir xy.XY) int {
 	if s.ref[c] == nil {
 		i := s.g.AddNewEmptyVertex()
-		s.ref[c] = make(map[utils.XY]int)
+		s.ref[c] = make(map[xy.XY]int)
 		s.ref[c][dir] = i
-		s.revRef[i] = [2]utils.XY{c, dir}
+		s.revRef[i] = [2]xy.XY{c, dir}
 	} else {
 		if _, ok := s.ref[c][dir]; !ok {
 			i := s.g.AddNewEmptyVertex()
 			s.ref[c][dir] = i
-			s.revRef[i] = [2]utils.XY{c, dir}
+			s.revRef[i] = [2]xy.XY{c, dir}
 		}
 	}
 
 	return s.ref[c][dir]
 }
 
-func (s *xRoadState) parse(c utils.XY, dir utils.XY) {
+func (s *xRoadState) parse(c xy.XY, dir xy.XY) {
 	i := 1
 
 	for {
@@ -143,13 +143,13 @@ func (s *xRoadState) parse(c utils.XY, dir utils.XY) {
 		}
 
 		gi1, gi2 := s.getIndex(c, dir), s.getIndex(nc, dir.RotateUnitVector(-4))
-		s.g.AddArc(gi1, gi2, uint64(i) - 1)
+		s.g.AddArc(gi1, gi2, uint64(i)-1)
 
 		return
 	}
 }
 
-func parseInput(inp string) (dir utils.XY, m []string, posS, posE utils.XY, gd *xRoadState) {
+func parseInput(inp string) (dir xy.XY, m []string, posS, posE xy.XY, gd *xRoadState) {
 	sI := strings.Index(inp, "S")
 	eI := strings.Index(inp, "E")
 	arr := []rune(inp)
@@ -159,10 +159,10 @@ func parseInput(inp string) (dir utils.XY, m []string, posS, posE utils.XY, gd *
 	lines := strings.Split(string(arr), "\n")
 
 	perLine := len(lines) + 1
-	posS = utils.XY{sI % perLine, sI/perLine}
-	posE = utils.XY{eI % perLine, eI/perLine}
+	posS = xy.XY{sI % perLine, sI / perLine}
+	posE = xy.XY{eI % perLine, eI / perLine}
 
-	return utils.DIR_RIGHT, lines, posS, posE, makeGraph(lines, posS, utils.DIR_RIGHT, posE)
+	return xy.DIR_RIGHT, lines, posS, posE, makeGraph(lines, posS, xy.DIR_RIGHT, posE)
 }
 
 func Solve1(inp string) any {
@@ -183,9 +183,9 @@ func Solve1(inp string) any {
 	return int(best.Distance)
 }
 
-func path(c1, c2 utils.XY) []utils.XY {
+func path(c1, c2 xy.XY) []xy.XY {
 	dir := c2.Add(c1.Mul(-1)).Unit()
-	o := []utils.XY{c1}
+	o := []xy.XY{c1}
 	last := c1
 
 	for {
@@ -204,7 +204,7 @@ func Solve2(inp string) any {
 
 	startIndex := gd.ref[start][sDir]
 	best := uint64(0)
-	bestPaths := map[utils.XY]bool{}
+	bestPaths := map[xy.XY]bool{}
 
 	for _, finIndex := range gd.ref[end] {
 		v, err := gd.g.ShortestAll(startIndex, finIndex)
@@ -212,7 +212,7 @@ func Solve2(inp string) any {
 
 		if best == 0 || v.Distance <= best {
 			if v.Distance != best {
-				bestPaths = make(map[utils.XY]bool)
+				bestPaths = make(map[xy.XY]bool)
 				best = v.Distance
 			}
 

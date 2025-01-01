@@ -6,21 +6,22 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 type State struct {
-	InsPtr int
+	InsPtr  int
 	AllCode []int
 	A, B, C int
-	Output []int
+	Output  []int
 }
 
 func (s *State) String() string {
 	str := []string{}
 
 	for i, v := range []int{s.A, s.B, s.C} {
-		str = append(str, "Registry " + string(rune('A' + i)) + ": " + strconv.Itoa(v))
+		str = append(str, "Registry "+string(rune('A'+i))+": "+strconv.Itoa(v))
 	}
 
 	return strings.Join(str, "\n")
@@ -36,7 +37,7 @@ func (s *State) adv(operand int) (int, bool) {
 }
 
 func (s *State) runOnce() bool {
-	operand := s.AllCode[s.InsPtr + 1]
+	operand := s.AllCode[s.InsPtr+1]
 	ok := true
 
 	switch s.AllCode[s.InsPtr] {
@@ -57,7 +58,7 @@ func (s *State) runOnce() bool {
 	case 4:
 		s.B ^= s.C
 	case 5:
-		s.Output = append(s.Output, s.comboCode(operand) % 8)
+		s.Output = append(s.Output, s.comboCode(operand)%8)
 	case 6:
 		s.B, ok = s.adv(operand)
 	case 7:
@@ -89,28 +90,18 @@ func (s *State) runForever() {
 	}
 }
 
-func (s *State) runUntilReset() {
-	for s.InsPtr < len(s.AllCode) {
-		s.runOnce()
-
-		if s.InsPtr < len(s.AllCode) && s.AllCode[s.InsPtr] == 3 {
-			break
-		}
-	}
-}
-
 func parseInput(inp string) *State {
 	spl := strings.Split(inp, "\n\n")
 
 	s := &State{
-		AllCode: utils.SplitAndParseInt(spl[1][9:], ","),
+		AllCode: sparse.SplitAndParseInt(spl[1][9:], ","),
 	}
 
 	for _, v := range strings.Split(spl[0], "\n") {
 		rowData := strings.Split(v, ": ")
-		v := utils.ParseInt(rowData[1])
+		v := sparse.ParseInt(rowData[1])
 
-		switch rowData[0][len(rowData[0]) - 1] {
+		switch rowData[0][len(rowData[0])-1] {
 		case 'A':
 			s.A = v
 		case 'B':
@@ -123,12 +114,11 @@ func parseInput(inp string) *State {
 	return s
 }
 
-
 func Solve1(inp string) any {
 	s := parseInput(inp)
 	s.runForever()
 
-	return strings.Join(utils.Map(s.Output, strconv.Itoa), ",")
+	return strings.Join(xarr.Map(s.Output, strconv.Itoa), ",")
 }
 
 func Solve2(inp string) any {
@@ -141,7 +131,7 @@ func Solve2(inp string) any {
 				panic("Got bad assumption: multiple A writes (opcode 0)")
 			}
 
-			operant = s.AllCode[i + 1]
+			operant = s.AllCode[i+1]
 		}
 	}
 
@@ -156,22 +146,22 @@ func Solve2(inp string) any {
 
 	for tI >= 0 {
 		found := false
-	
+
 		for i := 0; i < 64; i++ {
-			s.A, s.B, s.C = base + i, 0, 0
+			s.A, s.B, s.C = base+i, 0, 0
 			s.InsPtr = 0
 			s.Output = []int{}
-	
+
 			s.runForever()
-	
+
 			if slices.Equal(s.Output, s.AllCode[tI:]) {
 				fmt.Println(s.Output, s.AllCode[tI:])
 
 				base = (base + i) * p2
 				tI--
-	
+
 				found = true
-	
+
 				break
 			}
 		}
@@ -181,5 +171,5 @@ func Solve2(inp string) any {
 		}
 	}
 
-	return base/8
+	return base / 8
 }

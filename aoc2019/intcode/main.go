@@ -4,7 +4,7 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 var (
@@ -33,7 +33,7 @@ var (
 func ParseIntCode(inp string) map[int]int {
 	m := map[int]int{}
 
-	for i, v := range utils.SplitAndParseInt(inp, ",") {
+	for i, v := range sparse.SplitAndParseInt(inp, ",") {
 		m[i] = v
 	}
 

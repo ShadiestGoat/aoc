@@ -3,7 +3,7 @@ package day5
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/funiter"
 )
 
 const (
@@ -37,11 +37,11 @@ func SeatID(v [2]int) int {
 	return v[0]*8 + v[1]
 }
 
-func parseInput(inp string) utils.Iterator[[2]int] {
+func parseInput(inp string) funiter.Iterator[[2]int] {
 	passes := strings.Split(inp, "\n")
 	i := 0
 
-	return utils.NewScannerUtil(func() ([2]int, bool) {
+	return funiter.NewScannerUtil(func() ([2]int, bool) {
 		if i >= len(passes) {
 			return [2]int{}, false
 		}

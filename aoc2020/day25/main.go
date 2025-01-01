@@ -1,9 +1,9 @@
 package day25
 
-import "github.com/shadiestgoat/aoc/utils"
+import "github.com/shadiestgoat/aoc/utils/sparse"
 
 func parseInput(inp string) []int {
-	return utils.SplitAndParseInt(inp, "\n")
+	return sparse.SplitAndParseInt(inp, "\n")
 }
 
 func transformOnce(v int, subject int) int {
@@ -19,7 +19,7 @@ func findLoopSize(publicKey int) int {
 		if cur == publicKey {
 			return i + 1
 		}
-		
+
 		i++
 	}
 }

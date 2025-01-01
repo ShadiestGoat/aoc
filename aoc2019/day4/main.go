@@ -3,11 +3,11 @@ package day4
 import (
 	"strconv"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func parseInput(inp string) []int {
-	return utils.SplitAndParseInt(inp, "-")
+	return sparse.SplitAndParseInt(inp, "-")
 }
 
 func verifyNum(n int, noBig bool) bool {
@@ -22,10 +22,10 @@ func verifyNum(n int, noBig bool) bool {
 
 		if l == r {
 			if noBig {
-				if i > 0 && rune(str[i - 1]) == r {
+				if i > 0 && rune(str[i-1]) == r {
 					continue
 				}
-				if i < len(str) - 2 && rune(str[i + 2]) == r {
+				if i < len(str)-2 && rune(str[i+2]) == r {
 					continue
 				}
 			}

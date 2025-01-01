@@ -3,27 +3,27 @@ package day12
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 type State struct {
-	Regions map[int][]utils.XY
+	Regions   map[int][]xy.XY
 	ParsedMap [][]int
 }
 
-func (s *State) regionAt(xy utils.XY) int {
-	if xy.OutOfBounds(utils.GetSize(s.ParsedMap)) {
+func (s *State) regionAt(c xy.XY) int {
+	if c.OutOfBounds(xy.GetSize(s.ParsedMap)) {
 		return -1
 	}
 
-	return s.ParsedMap[xy[1]][xy[0]]
+	return s.ParsedMap[c[1]][c[0]]
 }
 
 func (s *State) GetEdgeAmount(r int) int {
 	c := 0
 
 	for _, coord := range s.Regions[r] {
-		for _, dir := range utils.ALL_DIRECT_DIRS {
+		for _, dir := range xy.ALL_DIRECT_DIRS {
 			if s.regionAt(coord.Add(dir)) != r {
 				c++
 			}
@@ -37,7 +37,7 @@ func (s *State) GetStartingEdgeAmount(r int) int {
 	c := 0
 
 	for _, coord := range s.Regions[r] {
-		for _, dir := range utils.ALL_DIRECT_DIRS {
+		for _, dir := range xy.ALL_DIRECT_DIRS {
 			if s.regionAt(coord.Add(dir)) == r {
 				continue
 			}
@@ -58,13 +58,13 @@ func (s *State) GetStartingEdgeAmount(r int) int {
 func parseInput(inp string) (*State, map[int]rune) {
 	regionInfo := map[int]rune{}
 	s := &State{
-		Regions:   map[int][]utils.XY{},
+		Regions:   map[int][]xy.XY{},
 		ParsedMap: [][]int{},
 	}
 
 	lines := strings.Split(inp, "\n")
 
-	checkRegion := func (x, y int, r rune) int {
+	checkRegion := func(x, y int, r rune) int {
 		lrID := s.ParsedMap[y][x]
 		if regionInfo[lrID] == r {
 			return lrID
@@ -80,22 +80,22 @@ func parseInput(inp string) (*State, map[int]rune) {
 		for x, r := range l {
 			lastRegion := -1
 			if x != 0 {
-				lastRegion = checkRegion(x - 1, y, r)
+				lastRegion = checkRegion(x-1, y, r)
 			}
 
 			if lastRegion == -1 && y > 0 {
-				tmp := utils.XY{x, y}
-				for !tmp.OutOfBounds(utils.GetSizeString(lines)) {
+				tmp := xy.XY{x, y}
+				for !tmp.OutOfBounds(xy.GetSizeString(lines)) {
 					if r == rune(l[tmp[0]]) {
-						if r == rune(lines[y - 1][tmp[0]]) {
-							lastRegion = checkRegion(tmp[0], y - 1, r)
+						if r == rune(lines[y-1][tmp[0]]) {
+							lastRegion = checkRegion(tmp[0], y-1, r)
 							break
 						}
 					} else {
 						break
 					}
 
-					tmp = tmp.Add(utils.XY{1, 0})
+					tmp = tmp.Add(xy.XY{1, 0})
 				}
 			}
 
@@ -106,7 +106,7 @@ func parseInput(inp string) (*State, map[int]rune) {
 			}
 
 			s.ParsedMap[y] = append(s.ParsedMap[y], lastRegion)
-			s.Regions[lastRegion] = append(s.Regions[lastRegion], utils.XY{x, y})
+			s.Regions[lastRegion] = append(s.Regions[lastRegion], xy.XY{x, y})
 		}
 	}
 
@@ -117,18 +117,18 @@ func parseInput(inp string) (*State, map[int]rune) {
 		foundSmt = false
 
 		for y, l := range lines {
-			if y == len(lines) - 1 {
+			if y == len(lines)-1 {
 				break
 			}
 
 			for x, r := range l {
-				if r != rune(lines[y + 1][x]) {
+				if r != rune(lines[y+1][x]) {
 					continue
 				}
 
 				cRID := s.ParsedMap[y][x]
 				// The new region id
-				rID := s.ParsedMap[y + 1][x]
+				rID := s.ParsedMap[y+1][x]
 				if rID == cRID {
 					continue
 				}

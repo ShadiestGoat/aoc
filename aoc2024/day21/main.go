@@ -3,11 +3,12 @@ package day21
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/xy"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 var (
-	keyPadCoords = map[rune]utils.XY{
+	keyPadCoords = map[rune]xy.XY{
 		'7': {-2, -3},
 		'8': {-1, -3},
 		'9': {0, -3},
@@ -24,36 +25,36 @@ var (
 		'A': {0, 0},
 	}
 
-	dirKeyPadCoords = map[utils.XY]utils.XY{
-		utils.DIR_UP: {-1, 0},
+	dirKeyPadCoords = map[xy.XY]xy.XY{
+		xy.DIR_UP: {-1, 0},
 		{}:           {0, 0},
 
-		utils.DIR_LEFT:  {-2, 1},
-		utils.DIR_DOWN:  {-1, 1},
-		utils.DIR_RIGHT: {0, 1},
+		xy.DIR_LEFT:  {-2, 1},
+		xy.DIR_DOWN:  {-1, 1},
+		xy.DIR_RIGHT: {0, 1},
 	}
 )
 
-type Dir utils.XY
+type Dir xy.XY
 
 func (d Dir) String() string {
 	switch d {
 	case Dir{}:
 		return "A"
-	case Dir(utils.DIR_UP):
+	case Dir(xy.DIR_UP):
 		return "^"
-	case Dir(utils.DIR_DOWN):
+	case Dir(xy.DIR_DOWN):
 		return "v"
-	case Dir(utils.DIR_LEFT):
+	case Dir(xy.DIR_LEFT):
 		return "<"
-	case Dir(utils.DIR_RIGHT):
+	case Dir(xy.DIR_RIGHT):
 		return ">"
 	}
 
 	return "?"
 }
 
-func diffToDirSeq(diff utils.XY, og utils.XY) []Dir {
+func diffToDirSeq(diff xy.XY, og xy.XY) []Dir {
 	base := diff.Unit()
 	seq := []Dir{}
 
@@ -75,9 +76,9 @@ func diffToDirSeq(diff utils.XY, og utils.XY) []Dir {
 		doAction(1)
 	}
 
-	if og[1] + diff[1] == 0 && og[0] == -2 {
+	if og[1]+diff[1] == 0 && og[0] == -2 {
 		xFirst()
-	} else if og[0] + diff[0] == -2 && og[1] == 0 {
+	} else if og[0]+diff[0] == -2 && og[1] == 0 {
 		yFirst()
 	} else if diff[0] < 0 {
 		xFirst()
@@ -87,8 +88,8 @@ func diffToDirSeq(diff utils.XY, og utils.XY) []Dir {
 
 	t := og
 	for _, v := range seq {
-		t = t.Add(utils.XY(v))
-		if t == (utils.XY{-2, 0}) {
+		t = t.Add(xy.XY(v))
+		if t == (xy.XY{-2, 0}) {
 			panic(">:(")
 		}
 	}
@@ -97,12 +98,12 @@ func diffToDirSeq(diff utils.XY, og utils.XY) []Dir {
 }
 
 // [oldPos, diff]
-var cache = map[[2]utils.XY]map[int]int{}
+var cache = map[[2]xy.XY]map[int]int{}
 
-func diffDeepResolve(lastPos, newPos utils.XY, left int) (int, utils.XY) {
+func diffDeepResolve(lastPos, newPos xy.XY, left int) (int, xy.XY) {
 	diff := newPos.Add(lastPos.Mul(-1))
 
-	cacheKey := [2]utils.XY{lastPos, diff}
+	cacheKey := [2]xy.XY{lastPos, diff}
 	if steps, ok := cache[cacheKey]; ok {
 		if steps[left] != 0 {
 			return steps[left], newPos
@@ -117,9 +118,9 @@ func diffDeepResolve(lastPos, newPos utils.XY, left int) (int, utils.XY) {
 	}
 
 	seqLen := 0
-	recPos := dirKeyPadCoords[utils.XY{}]
+	recPos := dirKeyPadCoords[xy.XY{}]
 	for _, v := range seq {
-		s, np := diffDeepResolve(recPos, dirKeyPadCoords[utils.XY(v)], left - 1)
+		s, np := diffDeepResolve(recPos, dirKeyPadCoords[xy.XY(v)], left-1)
 		seqLen += s
 		recPos = np
 	}
@@ -142,11 +143,11 @@ func genericSolve(inp string, robotCount int) int {
 			lastCode = c
 			l += sl
 		}
-		
-		num := utils.ParseInt(code[:len(code)-1])
+
+		num := sparse.ParseInt(code[:len(code)-1])
 		amt += l * num
 	}
-	
+
 	return amt
 }
 

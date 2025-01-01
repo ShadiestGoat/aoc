@@ -1,4 +1,18 @@
-package utils
+package mutils
+
+// Get the 'direction' of v.
+// v = 0 =>  0
+// v < 0 => -1
+// v > 0 =>  1
+func Dir(v int) int {
+	if v == 0 {
+		return 0
+	} else if v < 0 {
+		return -1
+	}
+
+	return 1
+}
 
 func GCD(a, b int) int {
 	if a < 0 {

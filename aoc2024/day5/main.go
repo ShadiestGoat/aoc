@@ -3,7 +3,8 @@ package day5
 import (
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 type Config struct {
@@ -28,7 +29,7 @@ func (c *Config) meetsDeps(n int, allVals map[int]bool, used map[int]bool) bool 
 
 func (c *Config) isListRight(l []int) bool {
 	used := map[int]bool{}
-	allVals := utils.MapListKeys(l)
+	allVals := xarr.MapListKeys(l)
 
 	for _, n := range l {
 		if !c.meetsDeps(n, allVals, used) {
@@ -42,7 +43,7 @@ func (c *Config) isListRight(l []int) bool {
 }
 
 func (c *Config) makeListRight(l []int) []int {
-	allVals := utils.MapListKeys(l)
+	allVals := xarr.MapListKeys(l)
 	used := map[int]bool{}
 	receptacle := []int{}
 	newL := []int{}
@@ -94,11 +95,11 @@ func parseInput(inp string) *Config {
 	spl := strings.Split(inp, "\n\n")
 	cfg := &Config{
 		NumDeps: map[int][]int{},
-		Lists:   utils.SplitAndParseInt2(spl[1], "\n", ","),
+		Lists:   sparse.SplitAndParseInt2(spl[1], "\n", ","),
 	}
 
 	for _, l := range strings.Split(spl[0], "\n") {
-		p := utils.SplitAndParseInt(l, "|")
+		p := sparse.SplitAndParseInt(l, "|")
 		cfg.NumDeps[p[1]] = append(cfg.NumDeps[p[1]], p[0])
 	}
 

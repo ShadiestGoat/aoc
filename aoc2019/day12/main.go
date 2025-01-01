@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/mutils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
+	"github.com/shadiestgoat/aoc/utils/xarr"
 )
 
 type World struct {
@@ -38,7 +40,7 @@ func (m *Moon) Move() {
 
 func (w *World) Tick() {
 	for i, m := range w.Moons {
-		for _, m2 := range w.Moons[i + 1:] {
+		for _, m2 := range w.Moons[i+1:] {
 			for j, p := range m.Pos {
 				if p > m2.Pos[j] {
 					m2.Vel[j]++
@@ -69,7 +71,7 @@ func parseInput(inp string) *World {
 		}
 
 		for i, p := range spl {
-			m.Pos[i] = utils.ParseInt(p[2:])
+			m.Pos[i] = sparse.ParseInt(p[2:])
 		}
 
 		w.Moons = append(w.Moons, m)
@@ -87,7 +89,7 @@ func GenericSolve1(inp string, steps int) any {
 
 	t := 0
 	for _, m := range w.Moons {
-		t += utils.AbsSum(m.Pos[:]) * utils.AbsSum(m.Vel[:])
+		t += xarr.AbsSum(m.Pos[:]) * xarr.AbsSum(m.Vel[:])
 	}
 
 	return t
@@ -162,5 +164,5 @@ func Solve2(inp string) any {
 		periods[i] = axisPeriods[i][1] - axisPeriods[i][0]
 	}
 
-	return utils.LCM(periods[:]...)
+	return mutils.LCM(periods[:]...)
 }

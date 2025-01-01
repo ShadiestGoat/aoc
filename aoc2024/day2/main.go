@@ -3,13 +3,11 @@ package day2
 import (
 	"math"
 
-	"github.com/shadiestgoat/aoc/utils"
+	"github.com/shadiestgoat/aoc/utils/sparse"
 )
 
 func parseInput(inp string) [][]int {
-	return utils.SplitAndParseFunc(inp, "\n", func(s string) []int {
-		return utils.SplitAndParseInt(s, " ")
-	})
+	return sparse.SplitAndParseInt2(inp, "\n", " ")
 }
 
 func isSafe(r []int) bool {
