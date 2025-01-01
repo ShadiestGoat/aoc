@@ -29,6 +29,12 @@ func SplitAndParseFunc[T any](inp string, delim string, h func(s string) T) []T 
 	return o
 }
 
+func SplitParseAndScan[T any](inp string, delim string, p func (s string) T, h func (T)) {
+	for _, v := range strings.Split(inp, delim) {
+		h(p(v))
+	}
+}
+
 func ParseInt(v string) int {
 	p, err := strconv.Atoi(v)
 	utils.PanicIfErr(err, "parsing '%v' as int", v)
