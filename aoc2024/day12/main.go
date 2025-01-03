@@ -42,8 +42,8 @@ func (s *State) GetStartingEdgeAmount(r int) int {
 				continue
 			}
 
-			if s.regionAt(dir.RotateUnitVector(2).Add(coord)) == r {
-				if s.regionAt(dir.RotateUnitVector(1).Add(coord)) != r {
+			if s.regionAt(dir.RotateVector(2).Add(coord)) == r {
+				if s.regionAt(dir.RotateVector(1).Add(coord)) != r {
 					continue
 				}
 			}

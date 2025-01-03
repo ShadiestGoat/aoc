@@ -37,7 +37,7 @@ func (r *Robot) RunOnce(w map[xy.XY]int) bool {
 
 	r.comp.Output = r.comp.Output[2:]
 
-	r.Dir = r.Dir.RotateUnitVector(rot)
+	r.Dir = r.Dir.RotateVector(rot)
 	r.Pos = r.Pos.Add(r.Dir)
 
 	return exitEarly

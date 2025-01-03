@@ -1,7 +1,6 @@
 package day17
 
 import (
-	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -155,8 +154,6 @@ func Solve2(inp string) any {
 			s.runForever()
 
 			if slices.Equal(s.Output, s.AllCode[tI:]) {
-				fmt.Println(s.Output, s.AllCode[tI:])
-
 				base = (base + i) * p2
 				tI--
 

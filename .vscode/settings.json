@@ -7,9 +7,14 @@
         "mutils",
         "nums",
         "segs",
+        "sillyset",
         "subtest",
+        "tset",
         "tutils",
         "xarr",
         "xprint"
     ],
+    "[csv]": {
+        "editor.inlayHints.maximumLength": 0
+    },
 }

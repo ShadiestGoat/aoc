@@ -85,15 +85,15 @@ func makeGraph(m []string, startPos, startDir, endPos xy.XY) *xRoadState {
 				continue
 			}
 
-			if v2, ok2 := dirs[d.RotateUnitVector(4)]; ok2 {
+			if v2, ok2 := dirs[d.RotateVector(4)]; ok2 {
 				s.g.AddArc(v, v2, 1)
 			}
 
-			if v2, ok2 := dirs[d.RotateUnitVector(2)]; ok2 {
+			if v2, ok2 := dirs[d.RotateVector(2)]; ok2 {
 				s.g.AddArc(v, v2, 1001)
 			}
 
-			if v2, ok2 := dirs[d.RotateUnitVector(-2)]; ok2 {
+			if v2, ok2 := dirs[d.RotateVector(-2)]; ok2 {
 				s.g.AddArc(v, v2, 1001)
 			}
 		}
@@ -142,7 +142,7 @@ func (s *xRoadState) parse(c xy.XY, dir xy.XY) {
 			continue
 		}
 
-		gi1, gi2 := s.getIndex(c, dir), s.getIndex(nc, dir.RotateUnitVector(-4))
+		gi1, gi2 := s.getIndex(c, dir), s.getIndex(nc, dir.RotateVector(-4))
 		s.g.AddArc(gi1, gi2, uint64(i)-1)
 
 		return

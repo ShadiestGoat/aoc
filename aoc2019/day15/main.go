@@ -60,7 +60,7 @@ func findMap(f MoveFunc) (map[xy.XY]bool, xy.XY) {
 
 		if o == 0 {
 			walls[np] = true
-			dir = dir.RotateUnitVector(2)
+			dir = dir.RotateVector(2)
 
 			continue
 		} else if o == 2 {
@@ -72,7 +72,7 @@ func findMap(f MoveFunc) (map[xy.XY]bool, xy.XY) {
 			return walls, endPos
 		}
 
-		dir = dir.RotateUnitVector(-2)
+		dir = dir.RotateVector(-2)
 		if np.IsAtOrigin() && !endPos.IsAtOrigin() {
 			next = true
 		}

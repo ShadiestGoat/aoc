@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/shadiestgoat/aoc/utils/xy"
 	"github.com/shadiestgoat/aoc/utils/tutils"
+	"github.com/shadiestgoat/aoc/utils/xy"
 )
 
 func TestRotateUnitVector(t *testing.T) {
@@ -17,7 +17,7 @@ func TestRotateUnitVector(t *testing.T) {
 					expI += 8
 				}
 
-				tutils.Assert(t, xy.ALL_DIRS[expI], ogD.RotateUnitVector(i))
+				tutils.Assert(t, xy.ALL_DIRS[expI], ogD.RotateVector(i))
 			})
 		}
 	}

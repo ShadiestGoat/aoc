@@ -48,15 +48,26 @@ func (c XY) ManhattanDistance() int {
 }
 
 func (c XY) ManhattanDistanceTo(c2 XY) int {
-	return int(math.Abs(float64(c[0] - c2[0])) + math.Abs(float64(c[1] - c2[1])))
+	return int(math.Abs(float64(c[0]-c2[0])) + math.Abs(float64(c[1]-c2[1])))
 }
 
-// Used to rate in case of a direction
-// Only works for the case of (-1, 1) directions.
-// Use a multiplication vector to do the rest
+// Used to rotate a vector
 // The n is the the amount of times to rotate clockwise (-1 means counterclockwise)
-func (c XY) RotateUnitVector(n int) XY {
-	deg := float64(n) * math.Pi/4
+func (c XY) RotateVector(n int) XY {
+	if c.Unit() == c {
+		for i, v := range ALL_DIRS {
+			if c == v {
+				ni := (i + n) % len(ALL_DIRS)
+				if ni < 0 {
+					ni += len(ALL_DIRS)
+				}
+
+				return ALL_DIRS[ni]
+			}
+		}
+	}
+
+	deg := float64(n) * math.Pi / 4
 
 	cos := math.Cos(deg)
 	sin := math.Sin(deg)
