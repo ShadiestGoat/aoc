@@ -5,6 +5,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/shadiestgoat/aoc/utils/mutils"
 	"github.com/shadiestgoat/aoc/utils/sparse"
 	"github.com/shadiestgoat/aoc/utils/xy"
 )
@@ -28,12 +29,6 @@ func (r Robot) AfterSeconds(s int, size xy.XY) xy.XY {
 	}
 
 	return c
-}
-
-func (r Robot) FindNearestNeighbor(dir xy.XY) int {
-	for {
-
-	}
 }
 
 func parseInput(inp string) []*Robot {
@@ -113,29 +108,104 @@ func drawOutput(robots []*Robot, mx, my int) {
 	fmt.Println(o[1:])
 }
 
+// Trust me, thats what were doing
+func differentiate(cur []int) []int {
+	diff := make([]int, len(cur) - 1)
+
+	for j := 0; j < len(cur) - 1; j++ {
+		diff[j] = cur[j + 1] - cur[j]
+	}
+
+	return diff
+}
+
+func clamp(min, v, max int) int {
+	if v < min {
+		return min
+	}
+	if v > max {
+		return max
+	}
+
+	return v
+}
+
 func Solve2(inp string) any {
 	robots := parseInput(inp)
 
-	tot := 0.0
-	i := 0.0
-
+	i := 1.0
+	totMH := 0.0
+	interestingPos := []int{}
 	for {
 		moveAllRobots(robots, 101, 103)
-		cur := 0
+		curMH := 0.0
 
-		for j, r := range robots {
-			for _, tr := range robots[j:] {
-				cur += r.Pos.ManhattanDistanceTo(tr.Pos)
+		for i, r := range robots {
+			for _, r2 := range robots[i + 1:] {
+				curMH += float64(r2.Pos.ManhattanDistanceTo(r.Pos))
 			}
 		}
 
-		// How luck based is this? Ssshhhh
-		if i > 50 && float64(cur) < (tot/i)*0.6 {
-			drawOutput(robots, 101, 103)
-			return i + 1
+		if i > 100 && curMH < (totMH/i)*0.85 {
+			interestingPos = append(interestingPos, int(i))
+
+			if len(interestingPos) == 5 {
+				break
+			}
+		}
+		if i > 100 && curMH < (totMH/i)*0.65 {
+			return i
 		}
 
-		tot += float64(cur)
+		totMH += curMH
 		i++
+	}
+
+	diff1 := differentiate(interestingPos)
+
+	// The current number
+	cur := interestingPos[3]
+	// The current first order diff
+	curDiff1 := diff1[2]
+
+	// The current second order diffs
+	diff2 := differentiate(diff1)
+	if diff2[0] < 0 {
+		diff2 = diff2[1:]
+		cur = interestingPos[4]
+		curDiff1 = diff1[3]
+	} else {
+		diff2 = diff2[:len(diff2) - 1]
+	}
+
+	diff2Diff := [2]int{
+		mutils.Dir(diff2[0]) * 4,
+		mutils.Dir(diff2[1]) * 4,
+	}
+
+	found := 0
+	for {
+		didQuirky := false
+
+		for i := 0; i < 2; i++ {
+			diff2[i] += diff2Diff[i]
+
+			if diff2[i] <= -100 || diff2[i] >= 100 {
+				didQuirky = true
+				diff2Diff[i] = -diff2Diff[i]
+
+				found++
+				if found > 2 {
+					return cur
+				}
+			}
+
+			curDiff1 += clamp(-100, diff2[i], 100)
+			cur += curDiff1
+		}
+
+		if didQuirky {
+			diff2[0], diff2[1] = -diff2[1], -diff2[0]
+		}
 	}
 }
