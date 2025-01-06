@@ -98,9 +98,9 @@ func diffToDirSeq(diff xy.XY, og xy.XY) []Dir {
 }
 
 // [oldPos, diff]
-var cache = map[[2]xy.XY]map[int]int{}
+type Cache = map[[2]xy.XY]map[int]int
 
-func diffDeepResolve(lastPos, newPos xy.XY, left int) (int, xy.XY) {
+func diffDeepResolve(lastPos, newPos xy.XY, left int, cache Cache) (int, xy.XY) {
 	diff := newPos.Add(lastPos.Mul(-1))
 
 	cacheKey := [2]xy.XY{lastPos, diff}
@@ -120,7 +120,7 @@ func diffDeepResolve(lastPos, newPos xy.XY, left int) (int, xy.XY) {
 	seqLen := 0
 	recPos := dirKeyPadCoords[xy.XY{}]
 	for _, v := range seq {
-		s, np := diffDeepResolve(recPos, dirKeyPadCoords[xy.XY(v)], left-1)
+		s, np := diffDeepResolve(recPos, dirKeyPadCoords[xy.XY(v)], left-1, cache)
 		seqLen += s
 		recPos = np
 	}
@@ -134,12 +134,14 @@ func genericSolve(inp string, robotCount int) int {
 	lines := strings.Split(inp, "\n")
 	amt := 0
 
+	var cache Cache = Cache{}
+
 	for _, code := range lines {
 		lastCode := 'A'
 		l := 0
 
 		for _, c := range code {
-			sl, _ := diffDeepResolve(keyPadCoords[lastCode], keyPadCoords[c], robotCount)
+			sl, _ := diffDeepResolve(keyPadCoords[lastCode], keyPadCoords[c], robotCount, cache)
 			lastCode = c
 			l += sl
 		}

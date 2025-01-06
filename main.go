@@ -17,10 +17,15 @@ import (
 
 var (
 	FLAG_OFFLINE = flag.Bool("o", false, "Offline (add a cur_day file) <3")
+	FLAG_BENCHMARK = flag.Bool("b", false, "Do Benchmarking")
+	FLAG_BENCH_AMT = flag.Int("amt", 1_000, "Benchmark amount")
 )
+
+var benchAmt = 0
 
 func init() {
 	flag.Parse()
+	benchAmt = *FLAG_BENCH_AMT
 }
 
 func main() {
@@ -83,15 +88,26 @@ func main() {
 	}
 
 	fmt.Println("---> Fetched")
-
 	fmt.Println("(2/2) Solving...")
 
-	t := time.Now()
-	ans := solve(strings.TrimSpace(inp))
-	dur := time.Since(t)
+	inp = strings.TrimSpace(inp)
 
-	fmt.Printf("---> Solved (%v)\n", dur)
+	if *FLAG_BENCHMARK {
+		t := time.Now()
+		for i := 0; i < benchAmt; i++ {
+			solve(inp)
+		}
+		dur := time.Since(t)
+
+		fmt.Printf("---> Benched: %v (avg)\n", dur/time.Duration(benchAmt))
+	} else {
+		t := time.Now()
+		ans := solve(inp)
+		dur := time.Since(t)
+
+		fmt.Printf("---> Solved! (%v)\n", dur)
+		fmt.Println(ans)
+	}
+
 	fmt.Println("<===================================>")
-
-	fmt.Println(ans)
 }

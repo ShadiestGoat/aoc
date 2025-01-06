@@ -40,7 +40,7 @@ func parseN(str string, includeFakes bool) int {
 func genericSolve(inp string, includeFakes bool) int {
 	c := 0
 
-	funiter.SplitAndScan(inp, "\n", func(s string) {
+	funiter.Scan(inp, "\n", func(s string) bool {
 		v := 0
 
 		for i := 0; i < len(s); i++ {
@@ -60,6 +60,8 @@ func genericSolve(inp string, includeFakes bool) int {
 		}
 
 		c += v
+
+		return false
 	})
 
 	return c

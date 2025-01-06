@@ -3,8 +3,6 @@ package sparse
 import (
 	"strconv"
 	"strings"
-
-	"github.com/shadiestgoat/aoc/utils"
 )
 
 func SplitAndParseInt(inp string, delim string) []int {
@@ -36,8 +34,24 @@ func SplitParseAndScan[T any](inp string, delim string, p func (s string) T, h f
 }
 
 func ParseInt(v string) int {
-	p, err := strconv.Atoi(v)
-	utils.PanicIfErr(err, "parsing '%v' as int", v)
+	n, _ := strconv.Atoi(v)
+	return n
+	// m := 1
+	// if v[0] == '-' || v[0] == '+' {
+	// 	if v[0] == '-' {
+	// 		m = -1
+	// 	}
+	// 	v = v[1:]
+	// }
 
-	return p
+	// n := 0
+	// for _, r := range v {
+	// 	if r < '0' || r > '9' {
+	// 		panic("Bad number syntax: " + v)
+	// 	}
+
+	// 	n = n*10 + int(r - '0')
+	// }
+
+	// return n * m
 }
