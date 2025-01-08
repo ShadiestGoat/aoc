@@ -1,7 +1,6 @@
 package sparse
 
 import (
-	"strconv"
 	"strings"
 )
 
@@ -34,24 +33,23 @@ func SplitParseAndScan[T any](inp string, delim string, p func (s string) T, h f
 }
 
 func ParseInt(v string) int {
-	n, _ := strconv.Atoi(v)
+	r0 := v[0]
+	if r0 == '+' || r0 == '-' {
+		v = v[1:]
+	}
+
+	n := 0
+	for _, r := range v {
+		if r < '0' || r > '9' {
+			panic("Bad number syntax: " + v)
+		}
+
+		n = n*10 + int(r - '0')
+	}
+
+	if r0 == '-' {
+		return -n
+	}
+
 	return n
-	// m := 1
-	// if v[0] == '-' || v[0] == '+' {
-	// 	if v[0] == '-' {
-	// 		m = -1
-	// 	}
-	// 	v = v[1:]
-	// }
-
-	// n := 0
-	// for _, r := range v {
-	// 	if r < '0' || r > '9' {
-	// 		panic("Bad number syntax: " + v)
-	// 	}
-
-	// 	n = n*10 + int(r - '0')
-	// }
-
-	// return n * m
 }
